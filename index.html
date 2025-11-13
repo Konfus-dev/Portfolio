@@ -166,9 +166,19 @@
     <a class="footer__top" href="#top" aria-label="Back to top">▲</a>
   </footer>
 
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+      }
+    }
+  </script>
+
   <script type="module">
-    import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
-    import { OrbitControls } from 'https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
     const container = document.querySelector('.hero__hologram');
     const canvas = document.getElementById('hero-globe');
@@ -210,25 +220,27 @@
       const planetGroup = new THREE.Group();
       scene.add(planetGroup);
 
-      const planetGeometry = new THREE.SphereGeometry(1.2, 128, 128);
-      const planetMaterial = new THREE.MeshStandardMaterial({
-        color: 0x6c4bff,
-        metalness: 0.5,
-        roughness: 0.35,
-        emissive: 0x220033,
-        emissiveIntensity: 0.8
-      });
-      const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-      planetGroup.add(planet);
+      const baseRadius = 1.2;
 
-      const atmosphereGeometry = new THREE.SphereGeometry(1.32, 96, 96);
+      const placeholderGeometry = new THREE.SphereGeometry(baseRadius, 128, 128);
+      const placeholderMaterial = new THREE.MeshStandardMaterial({
+        color: 0x4e38ff,
+        metalness: 0.5,
+        roughness: 0.32,
+        emissive: 0x1b1033,
+        emissiveIntensity: 0.9
+      });
+      const placeholderPlanet = new THREE.Mesh(placeholderGeometry, placeholderMaterial);
+      placeholderPlanet.name = 'planet-placeholder';
+      planetGroup.add(placeholderPlanet);
+
       const atmosphereMaterial = new THREE.MeshBasicMaterial({
         color: 0x8b6dff,
         transparent: true,
         opacity: 0.28,
         side: THREE.BackSide
       });
-      const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+      let atmosphere = new THREE.Mesh(new THREE.SphereGeometry(baseRadius * 1.08, 96, 96), atmosphereMaterial);
       planetGroup.add(atmosphere);
 
       const transmissionData = [
@@ -239,25 +251,10 @@
         { id: 'contact', label: 'Open Channel', lat: 8, lon: -170 }
       ];
 
+      const transmissionsGroup = new THREE.Group();
+      planetGroup.add(transmissionsGroup);
+
       const transmissionMeshes = [];
-      const pulseMaterial = new THREE.MeshBasicMaterial({
-        color: 0x8dffba,
-        transparent: true,
-        opacity: 0.25,
-        side: THREE.DoubleSide
-      });
-
-      const markerMaterial = new THREE.MeshStandardMaterial({
-        color: 0x7cff5b,
-        emissive: 0x4cffba,
-        emissiveIntensity: 1.2,
-        metalness: 0.3,
-        roughness: 0.1
-      });
-
-      const markerGeometry = new THREE.SphereGeometry(0.05, 24, 24);
-      const pulseGeometry = new THREE.RingGeometry(0.07, 0.11, 32);
-
       const latLonToVector3 = (lat, lon, radius) => {
         const phi = THREE.MathUtils.degToRad(90 - lat);
         const theta = THREE.MathUtils.degToRad(lon + 180);
@@ -267,24 +264,119 @@
         return new THREE.Vector3(x, y, z);
       };
 
+      const markerMaterial = new THREE.MeshStandardMaterial({
+        color: 0x7cff5b,
+        emissive: 0x4cffba,
+        emissiveIntensity: 1.3,
+        metalness: 0.35,
+        roughness: 0.08
+      });
+      const pulseMaterial = new THREE.MeshBasicMaterial({
+        color: 0x8dffba,
+        transparent: true,
+        opacity: 0.28,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      const glyphMaterial = new THREE.MeshBasicMaterial({
+        color: 0x6bfffb,
+        transparent: true,
+        opacity: 0.22,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      const beamMaterial = new THREE.MeshBasicMaterial({
+        color: 0x6ffff2,
+        transparent: true,
+        opacity: 0.45,
+        blending: THREE.AdditiveBlending,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+
+      const markerGeometry = new THREE.SphereGeometry(0.05, 24, 24);
+      const pulseGeometry = new THREE.RingGeometry(0.08, 0.12, 48);
+      const glyphGeometry = new THREE.CircleGeometry(0.18, 64);
+      const beamHeight = 0.5;
+      const beamGeometry = new THREE.CylinderGeometry(0.02, 0.06, beamHeight, 24, 1, true);
+
+      const updateAtmosphereGeometry = (planetRadius) => {
+        if (!atmosphere) return;
+        atmosphere.geometry.dispose();
+        atmosphere.geometry = new THREE.SphereGeometry(planetRadius * 1.08, 96, 96);
+      };
+
+      const updateTransmissionPlacement = (radius) => {
+        const normalHelper = new THREE.Vector3();
+        const quaternionHelper = new THREE.Quaternion();
+        const offsetHelper = new THREE.Vector3();
+        const yAxis = new THREE.Vector3(0, 1, 0);
+        const zAxis = new THREE.Vector3(0, 0, 1);
+
+        transmissionMeshes.forEach((transmission) => {
+          const { lat, lon } = transmission.userData;
+          const surfacePosition = latLonToVector3(lat, lon, radius);
+          normalHelper.copy(surfacePosition).normalize();
+
+          const marker = transmission.getObjectByName('marker');
+          if (marker) {
+            marker.position.copy(surfacePosition);
+          }
+
+          const pulse = transmission.getObjectByName('pulse');
+          if (pulse) {
+            offsetHelper.copy(normalHelper).multiplyScalar(radius + 0.06);
+            pulse.position.copy(offsetHelper);
+            pulse.lookAt(0, 0, 0);
+          }
+
+          const glyph = transmission.getObjectByName('glyph');
+          if (glyph) {
+            offsetHelper.copy(normalHelper).multiplyScalar(radius + 0.12);
+            glyph.position.copy(offsetHelper);
+            quaternionHelper.setFromUnitVectors(zAxis, normalHelper);
+            glyph.quaternion.copy(quaternionHelper);
+          }
+
+          const beam = transmission.getObjectByName('beam');
+          if (beam) {
+            quaternionHelper.setFromUnitVectors(yAxis, normalHelper);
+            beam.quaternion.copy(quaternionHelper);
+            const height = beam.userData.height || beamHeight;
+            offsetHelper.copy(normalHelper).multiplyScalar(radius + height * 0.5);
+            beam.position.copy(offsetHelper);
+          }
+        });
+      };
+
       transmissionData.forEach((data) => {
-        const position = latLonToVector3(data.lat, data.lon, 1.2);
-
-        const marker = new THREE.Mesh(markerGeometry, markerMaterial.clone());
-        marker.position.copy(position);
-
-        const pulse = new THREE.Mesh(pulseGeometry, pulseMaterial.clone());
-        pulse.position.copy(position.clone().multiplyScalar(1.02));
-        pulse.lookAt(0, 0, 0);
-
         const transmission = new THREE.Group();
         transmission.userData = data;
-        transmission.add(marker);
-        transmission.add(pulse);
-        planetGroup.add(transmission);
 
+        const marker = new THREE.Mesh(markerGeometry, markerMaterial.clone());
+        marker.name = 'marker';
+        transmission.add(marker);
+
+        const pulse = new THREE.Mesh(pulseGeometry, pulseMaterial.clone());
+        pulse.name = 'pulse';
+        transmission.add(pulse);
+
+        const glyph = new THREE.Mesh(glyphGeometry, glyphMaterial.clone());
+        glyph.name = 'glyph';
+        transmission.add(glyph);
+
+        const beam = new THREE.Mesh(beamGeometry, beamMaterial.clone());
+        beam.name = 'beam';
+        beam.userData.height = beamHeight;
+        transmission.add(beam);
+
+        transmissionsGroup.add(transmission);
         transmissionMeshes.push(transmission);
       });
+
+      updateTransmissionPlacement(baseRadius);
 
       const raycaster = new THREE.Raycaster();
       const pointer = new THREE.Vector2(2, 2);
@@ -298,7 +390,12 @@
         }
 
         const worldPosition = new THREE.Vector3();
-        target.getWorldPosition(worldPosition);
+        const marker = target.getObjectByName?.('marker');
+        if (marker && marker.getWorldPosition) {
+          marker.getWorldPosition(worldPosition);
+        } else {
+          target.getWorldPosition(worldPosition);
+        }
         const projected = worldPosition.project(camera);
         const x = (projected.x * 0.5 + 0.5) * container.clientWidth;
         const y = (-projected.y * 0.5 + 0.5) * container.clientHeight;
@@ -361,6 +458,14 @@
 
       const clock = new THREE.Clock();
 
+      const findTransmission = (object) => {
+        let current = object;
+        while (current && !current.userData?.id) {
+          current = current.parent;
+        }
+        return transmissionMeshes.includes(current) ? current : null;
+      };
+
       const animate = () => {
         requestAnimationFrame(animate);
         const delta = clock.getDelta();
@@ -369,16 +474,36 @@
         planetGroup.rotation.y += delta * 0.2;
 
         transmissionMeshes.forEach((transmission, index) => {
-          const marker = transmission.children[0];
-          const pulse = transmission.children[1];
-          const pulseScale = 1 + Math.sin(time * 3 + index) * 0.1;
-          pulse.scale.setScalar(pulseScale);
-          marker.scale.setScalar(hoveredTransmission === transmission ? 1.6 : 1);
+          const isHovered = hoveredTransmission === transmission;
+          const marker = transmission.getObjectByName('marker');
+          const pulse = transmission.getObjectByName('pulse');
+          const glyph = transmission.getObjectByName('glyph');
+          const beam = transmission.getObjectByName('beam');
+
+          if (pulse) {
+            const pulseScale = 1 + Math.sin(time * 3 + index) * 0.1;
+            pulse.scale.setScalar(pulseScale);
+            pulse.material.opacity = 0.22 + Math.sin(time * 2 + index) * 0.05 + (isHovered ? 0.2 : 0);
+          }
+
+          if (marker) {
+            marker.scale.setScalar(isHovered ? 1.7 : 1);
+          }
+
+          if (glyph) {
+            glyph.rotation.z = time * 1.4 + index * 0.4;
+            glyph.material.opacity = 0.18 + Math.sin(time * 1.3 + index) * 0.04 + (isHovered ? 0.12 : 0);
+          }
+
+          if (beam) {
+            const baseOpacity = 0.35 + Math.sin(time * 2 + index) * 0.08;
+            beam.material.opacity = isHovered ? 0.75 : baseOpacity;
+          }
         });
 
         raycaster.setFromCamera(pointer, camera);
         const intersects = raycaster.intersectObjects(transmissionMeshes, true);
-        const newHover = intersects.length ? intersects[0].object.parent : null;
+        const newHover = intersects.length ? findTransmission(intersects[0].object) : null;
 
         if (newHover !== hoveredTransmission) {
           hoveredTransmission = newHover;
@@ -396,6 +521,65 @@
       };
 
       animate();
+
+      const updatePlanetScale = (radius) => {
+        updateTransmissionPlacement(radius);
+        updateAtmosphereGeometry(radius);
+        controls.minDistance = radius * 2.3;
+        controls.maxDistance = radius * 4;
+      };
+
+      updatePlanetScale(baseRadius);
+
+      const loader = new GLTFLoader();
+      const modelUrl = new URL('./assets/models/planet.glb', import.meta.url);
+      loader.load(
+        modelUrl.href,
+        (gltf) => {
+          const planetModel = gltf.scene;
+          planetModel.traverse((child) => {
+            if (child.isMesh) {
+              child.material = child.material.clone();
+              child.material.metalness = 0.45;
+              child.material.roughness = 0.28;
+              if ('emissive' in child.material) {
+                child.material.emissive = new THREE.Color(0x120a2a);
+                child.material.emissiveIntensity = 0.7;
+              }
+            }
+          });
+
+          const box = new THREE.Box3().setFromObject(planetModel);
+          const size = new THREE.Vector3();
+          box.getSize(size);
+          const maxDimension = Math.max(size.x, size.y, size.z);
+          if (maxDimension > 0) {
+            const targetDiameter = baseRadius * 2;
+            const scale = targetDiameter / maxDimension;
+            planetModel.scale.setScalar(scale);
+          }
+
+          box.setFromObject(planetModel);
+          const sphere = new THREE.Sphere();
+          box.getBoundingSphere(sphere);
+
+          planetGroup.add(planetModel);
+
+          planetGroup.remove(placeholderPlanet);
+          placeholderPlanet.geometry.dispose();
+          placeholderPlanet.material.dispose();
+
+          if (!Number.isNaN(sphere.radius) && sphere.radius > 0) {
+            updatePlanetScale(sphere.radius);
+          } else {
+            updatePlanetScale(baseRadius);
+          }
+        },
+        undefined,
+        (error) => {
+          console.error('Failed to load planet model', error);
+        }
+      );
     }
   </script>
 
