@@ -202,7 +202,7 @@ function buildScene() {
   const coreGeometry = new THREE.SphereGeometry(1.8, 64, 64);
   const coreMaterial = new THREE.MeshStandardMaterial({
     color: 0x083024,
-    roughness: 0.6,
+    roughness: 0,
     metalness: 0.25,
     emissive: 0x06281d,
     emissiveIntensity: 0.85,
@@ -236,9 +236,9 @@ function buildScene() {
   const ambient = new THREE.AmbientLight(0x83ffd4, 0.35);
   scene.add(ambient);
 
-  const keyLight = new THREE.DirectionalLight(0xb4ffe6, 0.85);
-  keyLight.position.set(5, 3, 6);
-  scene.add(keyLight);
+  // const keyLight = new THREE.DirectionalLight(0xb4ffe6, 0.85);
+  // keyLight.position.set(5, 3, 6);
+  // scene.add(keyLight);
 
   const rimLight = new THREE.DirectionalLight(0x46f7c0, 0.75);
   rimLight.position.set(-6, -4, -3);
