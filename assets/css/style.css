@@ -47,6 +47,7 @@ body::before {
   mix-blend-mode: screen;
   pointer-events: none;
   z-index: 0;
+  mix-blend-mode: screen;
 }
 
 .crt-overlay {
@@ -399,6 +400,23 @@ body::before {
   .inspector__body {
     grid-template-columns: 1fr;
   }
+
+  .hero__content {
+    grid-template-columns: 1fr;
+  }
+
+  .console__body {
+    grid-template-columns: 1fr;
+  }
+
+  .console__menu {
+    padding-left: 0;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .console__menu::before {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -417,3 +435,5 @@ body::before {
     grid-template-columns: 1fr;
   }
 }
+
+
