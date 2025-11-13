@@ -233,16 +233,16 @@ function buildScene() {
   const gridMesh = new THREE.Mesh(gridGeometry, gridMaterial);
   planetGroup.add(gridMesh);
 
-  const ambient = new THREE.AmbientLight(0x83ffd4, 0.35);
-  scene.add(ambient);
+  // const ambient = new THREE.AmbientLight(0x83ffd4, 0.35);
+  // scene.add(ambient);
 
   // const keyLight = new THREE.DirectionalLight(0xb4ffe6, 0.85);
   // keyLight.position.set(5, 3, 6);
   // scene.add(keyLight);
 
-  const rimLight = new THREE.DirectionalLight(0x46f7c0, 0.75);
-  rimLight.position.set(-6, -4, -3);
-  scene.add(rimLight);
+  // const rimLight = new THREE.DirectionalLight(0x46f7c0, 0.75);
+  // rimLight.position.set(-6, -4, -3);
+  // scene.add(rimLight);
 
   const markerGeometry = new THREE.SphereGeometry(0.085, 20, 20);
 
