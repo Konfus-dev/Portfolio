@@ -3,11 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeremy Hummel | Signal Inspector</title>
+  <title>Jeremy Hummel | Orbital Signal Inspector</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout/terminal-shell.css">
+  <link rel="stylesheet" href="css/layout/landing.css">
+  <link rel="stylesheet" href="css/layout/inspector.css">
+  <link rel="stylesheet" href="css/components/popup.css">
+  <link rel="stylesheet" href="css/components/loading-bar.css">
 </head>
 <body>
   <div class="crt-overlay" aria-hidden="true"></div>
@@ -21,24 +26,46 @@
         </div>
       </header>
       <main class="terminal-screen" aria-live="polite">
-        <section class="boot-screen" aria-label="Boot sequence">
-          <div class="boot-screen__glass"></div>
-          <div class="boot-screen__log" role="log"></div>
-          <p class="boot-screen__hint" aria-hidden="true">PRESS <span>ENTER</span> TO ACCESS INSPECTOR<span class="boot-screen__cursor" aria-hidden="true"></span></p>
+        <section class="scene landing scene--active" data-scene="landing" aria-label="Access instructions">
+          <div class="landing__grid">
+            <div class="landing__intro">
+              <h1>Signal Access Protocol</h1>
+              <p>
+                Welcome, operator. The orbital archive is standing by with decrypted transmissions from across the
+                system. Authenticate to transfer into the live orbital view and inspect each signal packet in detail.
+              </p>
+              <ol>
+                <li><span>Phase 01</span> Review the boot log for current station diagnostics.</li>
+                <li><span>Phase 02</span> Provide your call sign credentials to request access.</li>
+                <li><span>Phase 03</span> Engage the inspector and rotate the orb to pinpoint active signals.</li>
+              </ol>
+            </div>
+            <div class="landing__console">
+              <div class="landing__log" role="log" aria-live="polite"></div>
+              <form class="landing-form" autocomplete="off" novalidate>
+                <label for="call-sign">Call sign</label>
+                <div class="landing-form__input">
+                  <span>&gt;</span>
+                  <input id="call-sign" name="call-sign" type="text" placeholder="enter access key" required maxlength="28">
+                </div>
+                <button class="landing-form__submit" type="submit">Engage Inspector</button>
+                <p class="landing-form__hint">Press enter or tap the button to continue.</p>
+                <p class="landing-form__error" role="alert" aria-live="assertive" hidden></p>
+              </form>
+            </div>
+          </div>
         </section>
-        <section class="inspector" aria-label="Planetary signal inspector" aria-hidden="true">
-          <header class="inspector__header">
-            <h1 class="inspector__title">ORBITAL SIGNAL INSPECTOR</h1>
-            <p class="inspector__subtitle">rotate the planet · click a signal to decrypt the packet</p>
-          </header>
-          <div class="inspector__body">
+        <section class="scene inspector" data-scene="inspector" aria-label="Planetary signal inspector" aria-hidden="true">
+          <div class="inspector__header">
+            <h1 class="inspector__title">Orbital Signal Inspector</h1>
+            <p class="inspector__subtitle">Rotate the planet · lock onto a signal · decrypt the transmission</p>
+          </div>
+          <div class="inspector__layout">
             <div class="inspector__display">
               <canvas id="planet-canvas" width="960" height="720" aria-label="3D planet visualization">
                 Your device does not support the WebGL inspector.
               </canvas>
-              <div class="inspector__overlay">
-                <p>TRACKING SIGNALS...</p>
-              </div>
+              <div class="inspector__overlay">TRACKING SIGNALS...</div>
             </div>
             <aside class="signal-readout" aria-live="polite">
               <h2 class="signal-readout__title">Awaiting input…</h2>
@@ -50,7 +77,9 @@
                 </div>
                 <div>
                   <dt>Stack</dt>
-                  <dd class="signal-readout__stack">—</dd>
+                  <dd>
+                    <ul class="signal-readout__stack-list"></ul>
+                  </dd>
                 </div>
                 <div>
                   <dt>Coordinates</dt>
@@ -64,6 +93,35 @@
       </main>
     </div>
   </div>
-  <script type="module" src="assets/js/inspector.js"></script>
+
+  <div class="signal-popup" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="signal-popup__backdrop" data-popup-close></div>
+    <div class="signal-popup__panel" role="document">
+      <button class="signal-popup__close" type="button" aria-label="Close signal details" data-popup-close>&times;</button>
+      <p class="signal-popup__channel"></p>
+      <h2 class="signal-popup__title"></h2>
+      <p class="signal-popup__tagline"></p>
+      <p class="signal-popup__summary"></p>
+      <section class="signal-popup__stack" aria-label="Technology stack">
+        <h3>Stack</h3>
+        <ul class="signal-popup__stack-list"></ul>
+      </section>
+      <section class="signal-popup__log" aria-label="Transmission log">
+        <h3>Transmission Log</h3>
+        <pre class="signal-popup__log-entries"></pre>
+      </section>
+    </div>
+  </div>
+
+  <div class="loading-overlay" aria-hidden="true" role="status">
+    <div class="loading-overlay__panel">
+      <p class="loading-overlay__label">Decrypting signal</p>
+      <div class="loading-overlay__bar">
+        <div class="loading-overlay__progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
