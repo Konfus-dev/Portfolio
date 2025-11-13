@@ -8,12 +8,7 @@ import { openSignalPopup, closeSignalPopup, isPopupOpen } from '../ui/signalPopu
 
 const inspectorSection = document.querySelector('[data-scene="inspector"]');
 const overlayText = inspectorSection.querySelector('.inspector__overlay');
-const readoutTitle = inspectorSection.querySelector('.signal-readout__title');
-const readoutSubtitle = inspectorSection.querySelector('.signal-readout__subtitle');
-const readoutSummary = inspectorSection.querySelector('.signal-readout__summary');
-const readoutChannel = inspectorSection.querySelector('.signal-readout__channel');
-const readoutStackList = inspectorSection.querySelector('.signal-readout__stack-list');
-const readoutCoords = inspectorSection.querySelector('.signal-readout__coords');
+const overlayDefaultMessage = 'TRACKING SIGNALS...';
 
 let renderer;
 let scene;
@@ -80,37 +75,13 @@ function latLonToVector3(lat, lon, radius) {
   return new THREE.Vector3(x, y, z);
 }
 
-function resetReadout() {
-  readoutTitle.textContent = 'Awaiting input…';
-  readoutSubtitle.textContent = 'Engage a signal marker to review the project dossier.';
-  readoutSummary.textContent = 'The archive is ready. Rotate the orb and select a glowing node to decrypt its contents.';
-  readoutChannel.textContent = '—';
-  readoutStackList.innerHTML = '';
-  const placeholder = document.createElement('li');
-  placeholder.textContent = '—';
-  readoutStackList.appendChild(placeholder);
-  readoutCoords.textContent = '—';
-  overlayText.textContent = 'TRACKING SIGNALS...';
+function setOverlayMessage(message = overlayDefaultMessage) {
+  if (!overlayText) return;
+  overlayText.textContent = message;
 }
 
-function updateReadout(signal) {
-  if (!signal) {
-    resetReadout();
-    return;
-  }
-
-  readoutTitle.textContent = signal.name;
-  readoutSubtitle.textContent = signal.tagline;
-  readoutSummary.textContent = signal.summary;
-  readoutChannel.textContent = signal.id;
-  readoutCoords.textContent = `${signal.lat.toFixed(2)}° / ${signal.lon.toFixed(2)}°`;
-  readoutStackList.innerHTML = '';
-  signal.stack.forEach((tech) => {
-    const li = document.createElement('li');
-    li.textContent = tech;
-    readoutStackList.appendChild(li);
-  });
-  overlayText.textContent = `${signal.id} LOCKED`;
+function resetOverlay() {
+  setOverlayMessage();
 }
 
 function highlightMarker(marker) {
@@ -133,8 +104,11 @@ function highlightMarker(marker) {
 
   activeMarker = marker || null;
 
-  if (!activeMarker && controls) {
-    controls.autoRotate = true;
+  if (!activeMarker) {
+    if (controls) {
+      controls.autoRotate = true;
+    }
+    resetOverlay();
   }
 }
 
@@ -165,15 +139,17 @@ async function handleSignalSelection(marker) {
   abortLoadingBar();
   closeSignalPopup();
   highlightMarker(marker);
-  updateReadout(signal);
+  setOverlayMessage(`DECRYPTING ${signal.id}…`);
 
   const duration = Math.floor(100 + Math.random() * 150);
-  await showLoadingBar(duration);
+  await showLoadingBar({ duration, label: `Decrypting ${signal.id}` });
 
   if (pendingSelection !== signal.id) {
+    resetOverlay();
     return;
   }
 
+  setOverlayMessage(`${signal.id} TRANSMISSION OPEN`);
   openSignalPopup(signal);
 }
 
@@ -432,7 +408,7 @@ export function initInspectorScene() {
       resetSelection() {
         pendingSelection = null;
         highlightMarker(null);
-        updateReadout(null);
+        resetOverlay();
         closeSignalPopup();
         abortLoadingBar();
       },
@@ -440,7 +416,7 @@ export function initInspectorScene() {
   }
 
   buildScene();
-  resetReadout();
+  resetOverlay();
   inspectorReady = true;
 
   document.addEventListener('visibilitychange', () => {
@@ -459,7 +435,7 @@ export function initInspectorScene() {
       }
       pendingSelection = null;
       highlightMarker(null);
-      updateReadout(null);
+      resetOverlay();
       abortLoadingBar();
     }
   });
@@ -474,7 +450,7 @@ export function initInspectorScene() {
     resetSelection() {
       pendingSelection = null;
       highlightMarker(null);
-      updateReadout(null);
+      resetOverlay();
       closeSignalPopup();
       abortLoadingBar();
     },

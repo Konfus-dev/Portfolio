@@ -28,24 +28,46 @@
       <main class="terminal-screen" aria-live="polite">
         <section class="scene landing scene--active" data-scene="landing" aria-label="Access instructions">
           <div class="landing__grid">
-            <div class="landing__intro">
-              <h1>Signal Access Protocol</h1>
-              <p>
-                Welcome, operator. The orbital archive is standing by with decrypted transmissions from across the
-                system. Authenticate to transfer into the live orbital view and inspect each signal packet in detail.
+            <div class="landing__intro" aria-live="polite">
+              <p class="landing__prompt-line">
+                <span class="landing__prompt">jh-os@relay:~$</span>
+                <span class="landing__command">help</span>
               </p>
-              <ol>
-                <li><span>Phase 01</span> Review the boot log for current station diagnostics.</li>
-                <li><span>Phase 02</span> Provide your call sign credentials to request access.</li>
-                <li><span>Phase 03</span> Engage the inspector and rotate the orb to pinpoint active signals.</li>
-              </ol>
+              <p class="landing__output">Available console routines:</p>
+              <dl class="landing__command-list">
+                <div class="landing__command-row">
+                  <dt>boot_sequence --diagnostics</dt>
+                  <dd>run orbital station checks</dd>
+                </div>
+                <div class="landing__command-row">
+                  <dt>listen --channel orbital-array</dt>
+                  <dd>tune receivers to active signals</dd>
+                </div>
+                <div class="landing__command-row">
+                  <dt>inspect --planetary-grid</dt>
+                  <dd>engage live orbital viewer</dd>
+                </div>
+                <div class="landing__command-row">
+                  <dt>access --call-sign &lt;id&gt;</dt>
+                  <dd>submit credentials for transfer</dd>
+                </div>
+              </dl>
+              <p class="landing__prompt-line">
+                <span class="landing__prompt">jh-os@relay:~$</span>
+                <span class="landing__command">cat instructions.txt</span>
+              </p>
+              <ul class="landing__instructions">
+                <li><span class="landing__instructions-step">01</span>Review diagnostics streaming in the console log.</li>
+                <li><span class="landing__instructions-step">02</span>Enter your call sign with <code>access --call-sign</code>.</li>
+                <li><span class="landing__instructions-step">03</span>Await transfer and rotate the planet to lock onto signals.</li>
+              </ul>
             </div>
             <div class="landing__console">
               <div class="landing__log" role="log" aria-live="polite"></div>
               <form class="landing-form" autocomplete="off" novalidate>
                 <label for="call-sign">Call sign</label>
                 <div class="landing-form__input">
-                  <span>&gt;</span>
+                  <span class="landing-form__caret">&gt;</span>
                   <input id="call-sign" name="call-sign" type="text" placeholder="enter access key" required maxlength="28">
                 </div>
                 <button class="landing-form__submit" type="submit">Engage Inspector</button>
@@ -60,35 +82,34 @@
             <h1 class="inspector__title">Orbital Signal Inspector</h1>
             <p class="inspector__subtitle">Rotate the planet · lock onto a signal · decrypt the transmission</p>
           </div>
-          <div class="inspector__layout">
+          <div class="inspector__viewer">
             <div class="inspector__display">
               <canvas id="planet-canvas" width="960" height="720" aria-label="3D planet visualization">
                 Your device does not support the WebGL inspector.
               </canvas>
               <div class="inspector__overlay">TRACKING SIGNALS...</div>
             </div>
-            <aside class="signal-readout" aria-live="polite">
-              <h2 class="signal-readout__title">Awaiting input…</h2>
-              <p class="signal-readout__subtitle">Engage a signal marker to review the project dossier.</p>
-              <dl class="signal-readout__meta">
-                <div>
-                  <dt>Channel</dt>
-                  <dd class="signal-readout__channel">—</dd>
-                </div>
-                <div>
-                  <dt>Stack</dt>
-                  <dd>
-                    <ul class="signal-readout__stack-list"></ul>
-                  </dd>
-                </div>
-                <div>
-                  <dt>Coordinates</dt>
-                  <dd class="signal-readout__coords">—</dd>
-                </div>
-              </dl>
-              <p class="signal-readout__summary">The archive is ready. Rotate the orb and select a glowing node to decrypt its contents.</p>
-            </aside>
           </div>
+          <footer class="inspector__transmission" aria-label="Transmission contact channels">
+            <div class="inspector__transmission-intro">
+              <h2>Transmission uplink</h2>
+              <p>Route a message through any channel below to initiate collaboration.</p>
+            </div>
+            <dl class="inspector__transmission-grid">
+              <div class="inspector__transmission-item">
+                <dt>Direct frequency</dt>
+                <dd><a href="mailto:hello@jeremyhummel.com">hello@jeremyhummel.com</a></dd>
+              </div>
+              <div class="inspector__transmission-item">
+                <dt>Secure channel</dt>
+                <dd><a href="https://www.linkedin.com/in/jeremyhummel/" target="_blank" rel="noopener">linkedin.com/in/jeremyhummel</a></dd>
+              </div>
+              <div class="inspector__transmission-item">
+                <dt>Code relay</dt>
+                <dd><a href="https://github.com/jeremyhummel" target="_blank" rel="noopener">github.com/jeremyhummel</a></dd>
+              </div>
+            </dl>
+          </footer>
         </section>
       </main>
     </div>

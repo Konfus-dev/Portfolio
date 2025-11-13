@@ -1,6 +1,7 @@
 import { SceneManager } from './utils/sceneManager.js';
 import { initLandingScene } from './scenes/landingScene.js';
 import { initInspectorScene } from './scenes/inspectorScene.js';
+import { showLoadingBar } from './ui/loadingBar.js';
 
 const statusIndicator = document.getElementById('terminal-status');
 const sceneManager = new SceneManager(document.querySelectorAll('.scene'));
@@ -8,12 +9,11 @@ const inspectorController = initInspectorScene();
 let callSign = null;
 
 const landingController = initLandingScene({
-  onAccessGranted(payload) {
+  async onAccessGranted(payload) {
     callSign = payload.callSign.toUpperCase();
     statusIndicator.textContent = 'AUTHENTICATING...';
-    setTimeout(() => {
-      sceneManager.show('inspector');
-    }, 260);
+    await showLoadingBar({ duration: 620, label: 'Initializing inspector' });
+    sceneManager.show('inspector');
   },
 });
 
