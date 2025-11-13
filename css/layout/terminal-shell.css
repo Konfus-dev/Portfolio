@@ -1,0 +1,189 @@
+.terminal-frame {
+  position: relative;
+  width: min(1400px, 96vw);
+  min-height: clamp(520px, 92vh, 1040px);
+  display: flex;
+  z-index: 1;
+}
+
+.terminal-bezel {
+  background: linear-gradient(145deg, rgba(9, 30, 22, 0.92), rgba(2, 11, 8, 0.92));
+  border: 2px solid rgba(122, 255, 176, 0.22);
+  border-radius: 42px;
+  padding: 2.1rem 2rem 2.6rem;
+  box-shadow:
+    0 0 45px rgba(42, 245, 152, 0.25),
+    inset 0 0 18px rgba(8, 40, 25, 0.75),
+    inset 0 0 0 1px rgba(122, 255, 176, 0.25);
+  backdrop-filter: blur(6px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(123, 255, 176, 0.2);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+
+.terminal-header__lamp {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(123, 255, 176, 0.9), rgba(42, 245, 152, 0.3));
+  box-shadow: 0 0 18px rgba(42, 245, 152, 0.7);
+}
+
+.terminal-header__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  flex: 1;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.terminal-header__status {
+  color: var(--primary);
+}
+
+.terminal-screen {
+  position: relative;
+  background: radial-gradient(circle at 50% 42%, rgba(4, 34, 24, 0.92) 0%, rgba(2, 16, 11, 0.88) 62%, rgba(1, 10, 7, 0.92) 100%);
+  border-radius: clamp(44px, 6vw, 72px);
+  overflow: hidden;
+  border: 1px solid rgba(123, 255, 176, 0.32);
+  box-shadow:
+    inset 0 0 110px rgba(16, 90, 60, 0.22),
+    inset 0 0 0 1px rgba(123, 255, 176, 0.35),
+    inset 0 45px 95px rgba(10, 52, 34, 0.4),
+    0 0 60px rgba(42, 245, 152, 0.18);
+  display: flex;
+  flex-direction: column;
+  isolation: isolate;
+  flex: 1;
+  min-height: 0;
+}
+
+.terminal-screen::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background-image:
+    radial-gradient(circle at 50% 46%, rgba(123, 255, 176, 0.16) 0%, rgba(36, 118, 78, 0.08) 38%, rgba(0, 0, 0, 0.65) 72%, rgba(0, 0, 0, 0.92) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(42, 245, 152, 0.18) 0,
+      rgba(42, 245, 152, 0.18) 1.5px,
+      rgba(0, 0, 0, 0) 1.5px,
+      rgba(0, 0, 0, 0) 3px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(17, 72, 48, 0.12) 0,
+      rgba(17, 72, 48, 0.12) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  background-size: 100% 100%, 100% 3px, 3px 100%;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  pointer-events: none;
+  filter: saturate(1.1);
+  animation: crtScanDrift 18s linear infinite, crtJitter 140ms steps(2) infinite;
+  z-index: 2;
+}
+
+.terminal-screen::after {
+  content: '';
+  position: absolute;
+  inset: -6%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.02) 35%, rgba(0, 0, 0, 0.45) 68%, rgba(0, 0, 0, 0.88) 100%),
+    radial-gradient(circle at 18% 20%, rgba(42, 245, 152, 0.2) 0%, transparent 40%),
+    radial-gradient(circle at 82% 28%, rgba(123, 255, 176, 0.12) 0%, transparent 38%);
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  opacity: 0.95;
+  filter: blur(0.6px);
+  z-index: 1;
+}
+
+@keyframes crtScanDrift {
+  from {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 0 0, 0 6px, 6px 0;
+  }
+}
+
+@keyframes crtJitter {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  25% {
+    transform: translate3d(0.4px, -0.2px, 0) scale(1.001);
+  }
+  50% {
+    transform: translate3d(-0.3px, 0.4px, 0) scale(1.002);
+  }
+  75% {
+    transform: translate3d(0.2px, 0.2px, 0) scale(0.999);
+  }
+}
+
+.scene {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100%;
+  flex: 1 1 auto;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 320ms ease, transform 320ms ease;
+  display: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.scene--active {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 1.5rem 1rem;
+  }
+
+  .terminal-bezel {
+    padding: 1.5rem 1.25rem 1.85rem;
+    border-radius: 32px;
+  }
+
+  .terminal-header__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .terminal-screen {
+    border-radius: clamp(32px, 9vw, 48px);
+  }
+}
