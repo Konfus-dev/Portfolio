@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeremy Hummel | Tools Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div class="scanline"></div>
+  <header class="hero" id="top">
+    <nav class="nav">
+      <a class="nav__logo" href="#top">JH</a>
+      <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu">☰</button>
+      <ul class="nav__links" id="nav-menu">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Highlights</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="hero__content">
+      <div class="hero__text">
+        <p class="hero__eyebrow">Tools Developer · Experience Designer</p>
+        <h1 class="hero__title">Jeremy Hummel</h1>
+        <p class="hero__subtitle">I craft intuitive tools that elevate creative teams—software that feels like futuristic magic but works with everyday precision.</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#contact">Connect</a>
+          <a class="btn btn--ghost" href="#experience">View Experience</a>
+        </div>
+      </div>
+      <div class="hero__hologram" aria-hidden="true">
+        <div class="hero__grid"></div>
+        <div class="hero__orb"></div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" id="about">
+      <div class="panel__header">
+        <h2 class="panel__title">About</h2>
+        <span class="panel__id">// 01</span>
+      </div>
+      <div class="panel__body">
+        <p class="blurb">I'm Jeremy Hummel, a Tools Developer with a passion for creating intuitive and easy to use software that goes above and beyond to not only make creation a breeze but delights users. I thrive on designing workflows that help creatives focus on their craft, while my tools handle the heavy lifting with a neon glow.</p>
+        <p>From game studios to live service entertainment teams, I partner with artists, designers, and engineers to transform wishlists into real, reliable systems. I blend empathetic discovery, rapid prototyping, and production-ready engineering to launch experiences that feel instantly familiar yet distinctly futuristic.</p>
+      </div>
+    </section>
+
+    <section class="panel" id="skills">
+      <div class="panel__header">
+        <h2 class="panel__title">Core Systems &amp; Skills</h2>
+        <span class="panel__id">// 02</span>
+      </div>
+      <div class="panel__body panel__body--grid">
+        <article class="card">
+          <h3 class="card__title">Technical Stack</h3>
+          <ul>
+            <li>C#, WPF &amp; WinForms</li>
+            <li>Python, PyQt, Qt</li>
+            <li>Unreal Engine Tools &amp; Editor Extensibility</li>
+            <li>Web Tech: TypeScript, Node.js, GraphQL</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Workflow Mastery</h3>
+          <ul>
+            <li>CI/CD &amp; Live Service Deployment</li>
+            <li>Instrumentation &amp; Analytics Pipelines</li>
+            <li>UX Discovery &amp; Co-Design Sessions</li>
+            <li>Automation &amp; Content Pipelines</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3 class="card__title">Creative Superpowers</h3>
+          <ul>
+            <li>Experience Prototyping &amp; User Testing</li>
+            <li>Visual Scripting Systems Design</li>
+            <li>Technical Documentation &amp; Training</li>
+            <li>Leading Cross-Disciplinary Initiatives</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="experience">
+      <div class="panel__header">
+        <h2 class="panel__title">Experience Transmission</h2>
+        <span class="panel__id">// 03</span>
+      </div>
+      <div class="panel__body panel__body--timeline">
+        <article class="timeline">
+          <header class="timeline__meta">
+            <h3 class="timeline__title">Disney Entertainment – Tools Engineer</h3>
+            <p class="timeline__date">Sep 2021 – Current</p>
+          </header>
+          <ul class="timeline__list">
+            <li>Implemented a live service game build and deployment pipeline, integrating Jira automation, Confluence reporting, and WPF tooling to reduce release friction.</li>
+            <li>Designed collaborative tools in WPF that combined roadmap visualization with defect triage to align cross-discipline teams.</li>
+            <li>Crafted a cross-team productivity dashboard and visual editor that accelerated UX feedback loops and boosted iteration speed.</li>
+            <li>Led Unreal Engine tooling initiatives that surfaced actionable insights and expanded design experimentation capacity.</li>
+          </ul>
+        </article>
+        <article class="timeline">
+          <header class="timeline__meta">
+            <h3 class="timeline__title">Blizzard Entertainment – Tools &amp; Engine Contractor</h3>
+            <p class="timeline__date">Sep 2020 – Aug 2021</p>
+          </header>
+          <ul class="timeline__list">
+            <li>Delivered Maya and Qt-powered content creation tools that empowered artists and designers to iterate faster on visuals and gameplay.</li>
+            <li>Enhanced automation around asset ingestion, review, and health tracking to safeguard live service quality.</li>
+            <li>Collaborated closely with art and production leaders to evolve cross-team workflows and onboard new creators efficiently.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="projects">
+      <div class="panel__header">
+        <h2 class="panel__title">Signal Boosts</h2>
+        <span class="panel__id">// 04</span>
+      </div>
+      <div class="panel__body panel__body--grid">
+        <article class="card card--signal">
+          <h3 class="card__title">LiveOps Control Center</h3>
+          <p>Centralized build deployment, monitoring, and alerting into a single operator console, cutting release prep time by 40%.</p>
+          <span class="card__tag">C#, WPF, Jira, Confluence</span>
+        </article>
+        <article class="card card--signal">
+          <h3 class="card__title">Blueprint Visual Scripting Toolkit</h3>
+          <p>Extended Unreal Engine with specialized nodes and diagnostics that empowered designers to prototype features without engineering dependencies.</p>
+          <span class="card__tag">Unreal Engine, C++, UX Research</span>
+        </article>
+        <article class="card card--signal">
+          <h3 class="card__title">Creative Analytics HUD</h3>
+          <p>Built a telemetry overlay that surfaced player feedback and live metrics directly in-editor, enabling data-driven iteration loops.</p>
+          <span class="card__tag">Python, GraphQL, Data Viz</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel panel--accent" id="contact">
+      <div class="panel__header">
+        <h2 class="panel__title">Open Channel</h2>
+        <span class="panel__id">// 05</span>
+      </div>
+      <div class="panel__body panel__body--contact">
+        <p>Ready to collaborate on the next generation of creator tools? Reach out and let's design something exceptional.</p>
+        <div class="contact__grid">
+          <a class="contact__link" href="mailto:hello@jeremyhummel.dev">hello@jeremyhummel.dev</a>
+          <a class="contact__link" href="https://github.com/JeremyHummel" target="_blank" rel="noopener">github.com/JeremyHummel</a>
+          <a class="contact__link" href="https://www.linkedin.com/in/jeremyhummel" target="_blank" rel="noopener">linkedin.com/in/jeremyhummel</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© <span id="year"></span> Jeremy Hummel · Crafted with retro-futurist love.</p>
+    <a class="footer__top" href="#top" aria-label="Back to top">▲</a>
+  </footer>
+
+  <script>
+    const toggle = document.querySelector('.nav__toggle');
+    const menu = document.querySelector('#nav-menu');
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true' || false;
+      toggle.setAttribute('aria-expanded', !expanded);
+      menu.classList.toggle('nav__links--open');
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
