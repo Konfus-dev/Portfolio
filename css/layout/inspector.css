@@ -3,8 +3,9 @@
   display: flex;
   flex-direction: column;
   gap: clamp(1.25rem, 2.5vw, 1.85rem);
-  min-height: 0;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 100%;
+  width: 100%;
 }
 
 .inspector__header {
@@ -12,6 +13,7 @@
   flex-direction: column;
   gap: 0.5rem;
   align-items: flex-start;
+  flex-shrink: 0;
 }
 
 .inspector__title {
@@ -35,7 +37,8 @@
   justify-content: center;
   align-items: center;
   min-height: 0;
-  padding-inline: clamp(0.25rem, 1vw, 0.75rem);
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+  width: 100%;
 }
 
 .inspector__display {
@@ -48,10 +51,8 @@
   justify-content: center;
   overflow: hidden;
   box-shadow: inset 0 0 32px rgba(42, 245, 152, 0.12);
-  width: min(100%, 720px);
-  aspect-ratio: 4 / 3;
-  max-height: min(62vh, 540px);
-  min-height: clamp(300px, 48vh, 460px);
+  width: min(100%, clamp(420px, 88vw, 1080px));
+  height: clamp(320px, 68vh, 760px);
 }
 
 .inspector__display canvas {
@@ -81,6 +82,9 @@
   display: flex;
   flex-direction: column;
   gap: clamp(1rem, 2vw, 1.5rem);
+  flex-shrink: 0;
+  width: min(100%, 960px);
+  margin: 0 auto;
 }
 
 .inspector__transmission h2 {
@@ -160,7 +164,7 @@
   }
 
   .inspector__viewer {
-    padding-inline: 0;
+    padding: clamp(0.5rem, 3vw, 1rem);
   }
 
   .inspector__transmission {

@@ -26,55 +26,19 @@
         </div>
       </header>
       <main class="terminal-screen" aria-live="polite">
-        <section class="scene landing scene--active" data-scene="landing" aria-label="Access instructions">
-          <div class="landing__grid">
-            <div class="landing__intro" aria-live="polite">
-              <p class="landing__prompt-line">
-                <span class="landing__prompt">jh-os@relay:~$</span>
-                <span class="landing__command">help</span>
-              </p>
-              <p class="landing__output">Available console routines:</p>
-              <dl class="landing__command-list">
-                <div class="landing__command-row">
-                  <dt>boot_sequence --diagnostics</dt>
-                  <dd>run orbital station checks</dd>
-                </div>
-                <div class="landing__command-row">
-                  <dt>listen --channel orbital-array</dt>
-                  <dd>tune receivers to active signals</dd>
-                </div>
-                <div class="landing__command-row">
-                  <dt>inspect --planetary-grid</dt>
-                  <dd>engage live orbital viewer</dd>
-                </div>
-                <div class="landing__command-row">
-                  <dt>access --call-sign &lt;id&gt;</dt>
-                  <dd>submit credentials for transfer</dd>
-                </div>
-              </dl>
-              <p class="landing__prompt-line">
-                <span class="landing__prompt">jh-os@relay:~$</span>
-                <span class="landing__command">cat instructions.txt</span>
-              </p>
-              <ul class="landing__instructions">
-                <li><span class="landing__instructions-step">01</span>Review diagnostics streaming in the console log.</li>
-                <li><span class="landing__instructions-step">02</span>Enter your call sign with <code>access --call-sign</code>.</li>
-                <li><span class="landing__instructions-step">03</span>Await transfer and rotate the planet to lock onto signals.</li>
-              </ul>
-            </div>
-            <div class="landing__console">
-              <div class="landing__log" role="log" aria-live="polite"></div>
-              <form class="landing-form" autocomplete="off" novalidate>
-                <label for="call-sign">Call sign</label>
-                <div class="landing-form__input">
-                  <span class="landing-form__caret">&gt;</span>
-                  <input id="call-sign" name="call-sign" type="text" placeholder="enter access key" required maxlength="28">
-                </div>
-                <button class="landing-form__submit" type="submit">Engage Inspector</button>
-                <p class="landing-form__hint">Press enter or tap the button to continue.</p>
-                <p class="landing-form__error" role="alert" aria-live="assertive" hidden></p>
-              </form>
-            </div>
+        <section class="scene landing scene--active" data-scene="landing" aria-label="Access console">
+          <div class="landing__console" role="region" aria-label="Orbital access console">
+            <div class="landing__log" role="log" aria-live="polite"></div>
+            <form class="landing-form" autocomplete="off" novalidate>
+              <label for="call-sign">Console input</label>
+              <div class="landing-form__input">
+                <span class="landing-form__caret" aria-hidden="true">jh-os@relay:~$</span>
+                <input id="call-sign" name="call-sign" type="text" placeholder="enter call sign" required maxlength="40" aria-describedby="console-hint">
+              </div>
+              <button class="landing-form__submit" type="submit">Execute</button>
+              <p class="landing-form__hint" id="console-hint">Identify with your call sign to unlock the console.</p>
+              <p class="landing-form__error" role="alert" aria-live="assertive" hidden></p>
+            </form>
           </div>
         </section>
         <section class="scene inspector" data-scene="inspector" aria-label="Planetary signal inspector" aria-hidden="true">

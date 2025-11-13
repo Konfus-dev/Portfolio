@@ -28,6 +28,7 @@ let hoveredMarker = null;
 let activeMarker = null;
 let pointerDown = null;
 let pendingSelection = null;
+let listenersBound = false;
 
 const loader = new GLTFLoader();
 const baseRadius = 1.82;
@@ -396,59 +397,62 @@ function stopAnimation() {
   }
 }
 
-export function initInspectorScene() {
+function ensureSceneReady() {
   if (inspectorReady) {
-    return {
-      activate() {
-        startAnimation();
-      },
-      deactivate() {
-        stopAnimation();
-      },
-      resetSelection() {
-        pendingSelection = null;
-        highlightMarker(null);
-        resetOverlay();
-        closeSignalPopup();
-        abortLoadingBar();
-      },
-    };
+    return;
   }
 
   buildScene();
   resetOverlay();
   inspectorReady = true;
 
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      stopAnimation();
-    } else if (inspectorReady) {
-      startAnimation();
-    }
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      if (isPopupOpen()) {
-        closeSignalPopup();
+  if (!listenersBound) {
+    document.addEventListener('visibilitychange', () => {
+      if (!inspectorReady) {
         return;
       }
-      pendingSelection = null;
-      highlightMarker(null);
-      resetOverlay();
-      abortLoadingBar();
-    }
-  });
+      if (document.hidden) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
+    });
 
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if (isPopupOpen()) {
+          closeSignalPopup();
+          return;
+        }
+        pendingSelection = null;
+        highlightMarker(null);
+        resetOverlay();
+        abortLoadingBar();
+      }
+    });
+
+    listenersBound = true;
+  }
+}
+
+export function initInspectorScene() {
   return {
     activate() {
+      ensureSceneReady();
+      onResize();
       startAnimation();
     },
     deactivate() {
+      if (!inspectorReady) {
+        return;
+      }
       stopAnimation();
     },
     resetSelection() {
       pendingSelection = null;
+      if (!inspectorReady) {
+        return;
+      }
       highlightMarker(null);
       resetOverlay();
       closeSignalPopup();
