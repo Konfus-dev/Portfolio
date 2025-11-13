@@ -3,596 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeremy Hummel | Tools Developer</title>
+  <title>Jeremy Hummel | Signal Inspector</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-  <div class="scanline"></div>
-  <header class="hero" id="top">
-    <nav class="nav">
-      <a class="nav__logo" href="#top">JH</a>
-      <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu">☰</button>
-      <ul class="nav__links" id="nav-menu">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#projects">Highlights</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-    <div class="hero__content">
-      <div class="hero__text">
-        <p class="hero__eyebrow">Tools Developer · Experience Designer</p>
-        <h1 class="hero__title">Jeremy Hummel</h1>
-        <p class="hero__subtitle">I craft intuitive tools that elevate creative teams—software that feels like futuristic magic but works with everyday precision.</p>
-        <div class="hero__actions">
-          <a class="btn btn--primary" href="#contact">Connect</a>
-          <a class="btn btn--ghost" href="#experience">View Experience</a>
+  <div class="crt-overlay" aria-hidden="true"></div>
+  <div class="terminal-frame">
+    <div class="terminal-bezel">
+      <header class="terminal-header">
+        <span class="terminal-header__lamp" aria-hidden="true"></span>
+        <div class="terminal-header__meta">
+          <span class="terminal-header__id">JH-OS // REMOTE OPS CONSOLE</span>
+          <span class="terminal-header__status" id="terminal-status">STANDBY</span>
         </div>
-      </div>
-      <div class="hero__hologram" aria-hidden="true">
-        <div class="hero__grid"></div>
-        <canvas id="hero-globe" aria-hidden="true"></canvas>
-        <div class="hero__tooltip" id="transmission-tooltip"></div>
-      </div>
+      </header>
+      <main class="terminal-screen" aria-live="polite">
+        <section class="boot-screen" aria-label="Boot sequence">
+          <div class="boot-screen__glass"></div>
+          <div class="boot-screen__log" role="log"></div>
+          <p class="boot-screen__hint" aria-hidden="true">PRESS <span>ENTER</span> TO ACCESS INSPECTOR<span class="boot-screen__cursor" aria-hidden="true"></span></p>
+        </section>
+        <section class="inspector" aria-label="Planetary signal inspector" aria-hidden="true">
+          <header class="inspector__header">
+            <h1 class="inspector__title">ORBITAL SIGNAL INSPECTOR</h1>
+            <p class="inspector__subtitle">rotate the planet · click a signal to decrypt the packet</p>
+          </header>
+          <div class="inspector__body">
+            <div class="inspector__display">
+              <canvas id="planet-canvas" width="960" height="720" aria-label="3D planet visualization">
+                Your device does not support the WebGL inspector.
+              </canvas>
+              <div class="inspector__overlay">
+                <p>TRACKING SIGNALS...</p>
+              </div>
+            </div>
+            <aside class="signal-readout" aria-live="polite">
+              <h2 class="signal-readout__title">Awaiting input…</h2>
+              <p class="signal-readout__subtitle">Engage a signal marker to review the project dossier.</p>
+              <dl class="signal-readout__meta">
+                <div>
+                  <dt>Channel</dt>
+                  <dd class="signal-readout__channel">—</dd>
+                </div>
+                <div>
+                  <dt>Stack</dt>
+                  <dd class="signal-readout__stack">—</dd>
+                </div>
+                <div>
+                  <dt>Coordinates</dt>
+                  <dd class="signal-readout__coords">—</dd>
+                </div>
+              </dl>
+              <p class="signal-readout__summary">The archive is ready. Rotate the orb and select a glowing node to decrypt its contents.</p>
+            </aside>
+          </div>
+        </section>
+      </main>
     </div>
-  </header>
-
-  <main>
-    <section class="panel" id="about">
-      <div class="panel__header">
-        <h2 class="panel__title">About</h2>
-        <span class="panel__id">// 01</span>
-      </div>
-      <div class="panel__body">
-        <p class="blurb">I'm Jeremy Hummel, a Tools Developer with a passion for creating intuitive and easy to use software that goes above and beyond to not only make creation a breeze but delights users. I thrive on designing workflows that help creatives focus on their craft, while my tools handle the heavy lifting with a neon glow.</p>
-        <p>From game studios to live service entertainment teams, I partner with artists, designers, and engineers to transform wishlists into real, reliable systems. I blend empathetic discovery, rapid prototyping, and production-ready engineering to launch experiences that feel instantly familiar yet distinctly futuristic.</p>
-      </div>
-    </section>
-
-    <section class="panel" id="skills">
-      <div class="panel__header">
-        <h2 class="panel__title">Core Systems &amp; Skills</h2>
-        <span class="panel__id">// 02</span>
-      </div>
-      <div class="panel__body panel__body--grid">
-        <article class="card">
-          <h3 class="card__title">Technical Stack</h3>
-          <ul>
-            <li>C#, WPF &amp; WinForms</li>
-            <li>Python, PyQt, Qt</li>
-            <li>Unreal Engine Tools &amp; Editor Extensibility</li>
-            <li>Web Tech: TypeScript, Node.js, GraphQL</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3 class="card__title">Workflow Mastery</h3>
-          <ul>
-            <li>CI/CD &amp; Live Service Deployment</li>
-            <li>Instrumentation &amp; Analytics Pipelines</li>
-            <li>UX Discovery &amp; Co-Design Sessions</li>
-            <li>Automation &amp; Content Pipelines</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3 class="card__title">Creative Superpowers</h3>
-          <ul>
-            <li>Experience Prototyping &amp; User Testing</li>
-            <li>Visual Scripting Systems Design</li>
-            <li>Technical Documentation &amp; Training</li>
-            <li>Leading Cross-Disciplinary Initiatives</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel" id="experience">
-      <div class="panel__header">
-        <h2 class="panel__title">Experience Transmission</h2>
-        <span class="panel__id">// 03</span>
-      </div>
-      <div class="panel__body panel__body--timeline">
-        <article class="timeline">
-          <header class="timeline__meta">
-            <h3 class="timeline__title">Disney Entertainment – Tools Engineer</h3>
-            <p class="timeline__date">Sep 2021 – Current</p>
-          </header>
-          <ul class="timeline__list">
-            <li>Implemented a live service game build and deployment pipeline, integrating Jira automation, Confluence reporting, and WPF tooling to reduce release friction.</li>
-            <li>Designed collaborative tools in WPF that combined roadmap visualization with defect triage to align cross-discipline teams.</li>
-            <li>Crafted a cross-team productivity dashboard and visual editor that accelerated UX feedback loops and boosted iteration speed.</li>
-            <li>Led Unreal Engine tooling initiatives that surfaced actionable insights and expanded design experimentation capacity.</li>
-          </ul>
-        </article>
-        <article class="timeline">
-          <header class="timeline__meta">
-            <h3 class="timeline__title">Blizzard Entertainment – Tools &amp; Engine Contractor</h3>
-            <p class="timeline__date">Sep 2020 – Aug 2021</p>
-          </header>
-          <ul class="timeline__list">
-            <li>Delivered Maya and Qt-powered content creation tools that empowered artists and designers to iterate faster on visuals and gameplay.</li>
-            <li>Enhanced automation around asset ingestion, review, and health tracking to safeguard live service quality.</li>
-            <li>Collaborated closely with art and production leaders to evolve cross-team workflows and onboard new creators efficiently.</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel" id="projects">
-      <div class="panel__header">
-        <h2 class="panel__title">Signal Boosts</h2>
-        <span class="panel__id">// 04</span>
-      </div>
-      <div class="panel__body panel__body--grid">
-        <article class="card card--signal">
-          <h3 class="card__title">LiveOps Control Center</h3>
-          <p>Centralized build deployment, monitoring, and alerting into a single operator console, cutting release prep time by 40%.</p>
-          <span class="card__tag">C#, WPF, Jira, Confluence</span>
-        </article>
-        <article class="card card--signal">
-          <h3 class="card__title">Blueprint Visual Scripting Toolkit</h3>
-          <p>Extended Unreal Engine with specialized nodes and diagnostics that empowered designers to prototype features without engineering dependencies.</p>
-          <span class="card__tag">Unreal Engine, C++, UX Research</span>
-        </article>
-        <article class="card card--signal">
-          <h3 class="card__title">Creative Analytics HUD</h3>
-          <p>Built a telemetry overlay that surfaced player feedback and live metrics directly in-editor, enabling data-driven iteration loops.</p>
-          <span class="card__tag">Python, GraphQL, Data Viz</span>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel panel--accent" id="contact">
-      <div class="panel__header">
-        <h2 class="panel__title">Open Channel</h2>
-        <span class="panel__id">// 05</span>
-      </div>
-      <div class="panel__body panel__body--contact">
-        <p>Ready to collaborate on the next generation of creator tools? Reach out and let's design something exceptional.</p>
-        <div class="contact__grid">
-          <a class="contact__link" href="mailto:hello@jeremyhummel.dev">hello@jeremyhummel.dev</a>
-          <a class="contact__link" href="https://github.com/JeremyHummel" target="_blank" rel="noopener">github.com/JeremyHummel</a>
-          <a class="contact__link" href="https://www.linkedin.com/in/jeremyhummel" target="_blank" rel="noopener">linkedin.com/in/jeremyhummel</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>© <span id="year"></span> Jeremy Hummel · Crafted with retro-futurist love.</p>
-    <a class="footer__top" href="#top" aria-label="Back to top">▲</a>
-  </footer>
-
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
-      }
-    }
-  </script>
-
-  <script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-    const container = document.querySelector('.hero__hologram');
-    const canvas = document.getElementById('hero-globe');
-    const tooltip = document.getElementById('transmission-tooltip');
-
-    if (container && canvas) {
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(
-        32,
-        container.clientWidth / container.clientHeight,
-        0.1,
-        100
-      );
-      camera.position.set(0, 0, 4);
-
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(container.clientWidth, container.clientHeight);
-
-      const controls = new OrbitControls(camera, canvas);
-      controls.enableDamping = true;
-      controls.enablePan = false;
-      controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.6;
-      controls.minDistance = 3;
-      controls.maxDistance = 5;
-
-      const ambientLight = new THREE.AmbientLight(0x6d6dff, 0.6);
-      scene.add(ambientLight);
-
-      const rimLight = new THREE.DirectionalLight(0xff6adf, 1.2);
-      rimLight.position.set(-2, 1.2, 2.5);
-      scene.add(rimLight);
-
-      const fillLight = new THREE.PointLight(0x5ef1ff, 1.3, 10);
-      fillLight.position.set(2, -1.2, 3);
-      scene.add(fillLight);
-
-      const planetGroup = new THREE.Group();
-      scene.add(planetGroup);
-
-      const baseRadius = 1.2;
-
-      const placeholderGeometry = new THREE.SphereGeometry(baseRadius, 128, 128);
-      const placeholderMaterial = new THREE.MeshStandardMaterial({
-        color: 0x4e38ff,
-        metalness: 0.5,
-        roughness: 0.32,
-        emissive: 0x1b1033,
-        emissiveIntensity: 0.9
-      });
-      const placeholderPlanet = new THREE.Mesh(placeholderGeometry, placeholderMaterial);
-      placeholderPlanet.name = 'planet-placeholder';
-      planetGroup.add(placeholderPlanet);
-
-      const atmosphereMaterial = new THREE.MeshBasicMaterial({
-        color: 0x8b6dff,
-        transparent: true,
-        opacity: 0.28,
-        side: THREE.BackSide
-      });
-      let atmosphere = new THREE.Mesh(new THREE.SphereGeometry(baseRadius * 1.08, 96, 96), atmosphereMaterial);
-      planetGroup.add(atmosphere);
-
-      const transmissionData = [
-        { id: 'about', label: 'About Signal', lat: 18, lon: -35 },
-        { id: 'skills', label: 'Systems & Skills', lat: -12, lon: 62 },
-        { id: 'experience', label: 'Experience Feed', lat: 32, lon: 142 },
-        { id: 'projects', label: 'Project Beacon', lat: -28, lon: -128 },
-        { id: 'contact', label: 'Open Channel', lat: 8, lon: -170 }
-      ];
-
-      const transmissionsGroup = new THREE.Group();
-      planetGroup.add(transmissionsGroup);
-
-      const transmissionMeshes = [];
-      const latLonToVector3 = (lat, lon, radius) => {
-        const phi = THREE.MathUtils.degToRad(90 - lat);
-        const theta = THREE.MathUtils.degToRad(lon + 180);
-        const x = -radius * Math.sin(phi) * Math.cos(theta);
-        const z = radius * Math.sin(phi) * Math.sin(theta);
-        const y = radius * Math.cos(phi);
-        return new THREE.Vector3(x, y, z);
-      };
-
-      const markerMaterial = new THREE.MeshStandardMaterial({
-        color: 0x7cff5b,
-        emissive: 0x4cffba,
-        emissiveIntensity: 1.3,
-        metalness: 0.35,
-        roughness: 0.08
-      });
-      const pulseMaterial = new THREE.MeshBasicMaterial({
-        color: 0x8dffba,
-        transparent: true,
-        opacity: 0.28,
-        side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      const glyphMaterial = new THREE.MeshBasicMaterial({
-        color: 0x6bfffb,
-        transparent: true,
-        opacity: 0.22,
-        side: THREE.DoubleSide,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
-      const beamMaterial = new THREE.MeshBasicMaterial({
-        color: 0x6ffff2,
-        transparent: true,
-        opacity: 0.45,
-        blending: THREE.AdditiveBlending,
-        side: THREE.DoubleSide,
-        depthWrite: false
-      });
-
-      const markerGeometry = new THREE.SphereGeometry(0.05, 24, 24);
-      const pulseGeometry = new THREE.RingGeometry(0.08, 0.12, 48);
-      const glyphGeometry = new THREE.CircleGeometry(0.18, 64);
-      const beamHeight = 0.5;
-      const beamGeometry = new THREE.CylinderGeometry(0.02, 0.06, beamHeight, 24, 1, true);
-
-      const updateAtmosphereGeometry = (planetRadius) => {
-        if (!atmosphere) return;
-        atmosphere.geometry.dispose();
-        atmosphere.geometry = new THREE.SphereGeometry(planetRadius * 1.08, 96, 96);
-      };
-
-      const updateTransmissionPlacement = (radius) => {
-        const normalHelper = new THREE.Vector3();
-        const quaternionHelper = new THREE.Quaternion();
-        const offsetHelper = new THREE.Vector3();
-        const yAxis = new THREE.Vector3(0, 1, 0);
-        const zAxis = new THREE.Vector3(0, 0, 1);
-
-        transmissionMeshes.forEach((transmission) => {
-          const { lat, lon } = transmission.userData;
-          const surfacePosition = latLonToVector3(lat, lon, radius);
-          normalHelper.copy(surfacePosition).normalize();
-
-          const marker = transmission.getObjectByName('marker');
-          if (marker) {
-            marker.position.copy(surfacePosition);
-          }
-
-          const pulse = transmission.getObjectByName('pulse');
-          if (pulse) {
-            offsetHelper.copy(normalHelper).multiplyScalar(radius + 0.06);
-            pulse.position.copy(offsetHelper);
-            pulse.lookAt(0, 0, 0);
-          }
-
-          const glyph = transmission.getObjectByName('glyph');
-          if (glyph) {
-            offsetHelper.copy(normalHelper).multiplyScalar(radius + 0.12);
-            glyph.position.copy(offsetHelper);
-            quaternionHelper.setFromUnitVectors(zAxis, normalHelper);
-            glyph.quaternion.copy(quaternionHelper);
-          }
-
-          const beam = transmission.getObjectByName('beam');
-          if (beam) {
-            quaternionHelper.setFromUnitVectors(yAxis, normalHelper);
-            beam.quaternion.copy(quaternionHelper);
-            const height = beam.userData.height || beamHeight;
-            offsetHelper.copy(normalHelper).multiplyScalar(radius + height * 0.5);
-            beam.position.copy(offsetHelper);
-          }
-        });
-      };
-
-      transmissionData.forEach((data) => {
-        const transmission = new THREE.Group();
-        transmission.userData = data;
-
-        const marker = new THREE.Mesh(markerGeometry, markerMaterial.clone());
-        marker.name = 'marker';
-        transmission.add(marker);
-
-        const pulse = new THREE.Mesh(pulseGeometry, pulseMaterial.clone());
-        pulse.name = 'pulse';
-        transmission.add(pulse);
-
-        const glyph = new THREE.Mesh(glyphGeometry, glyphMaterial.clone());
-        glyph.name = 'glyph';
-        transmission.add(glyph);
-
-        const beam = new THREE.Mesh(beamGeometry, beamMaterial.clone());
-        beam.name = 'beam';
-        beam.userData.height = beamHeight;
-        transmission.add(beam);
-
-        transmissionsGroup.add(transmission);
-        transmissionMeshes.push(transmission);
-      });
-
-      updateTransmissionPlacement(baseRadius);
-
-      const raycaster = new THREE.Raycaster();
-      const pointer = new THREE.Vector2(2, 2);
-      let hoveredTransmission = null;
-      let time = 0;
-
-      const updateTooltipPosition = (target) => {
-        if (!target) {
-          tooltip.style.opacity = '0';
-          return;
-        }
-
-        const worldPosition = new THREE.Vector3();
-        const marker = target.getObjectByName?.('marker');
-        if (marker && marker.getWorldPosition) {
-          marker.getWorldPosition(worldPosition);
-        } else {
-          target.getWorldPosition(worldPosition);
-        }
-        const projected = worldPosition.project(camera);
-        const x = (projected.x * 0.5 + 0.5) * container.clientWidth;
-        const y = (-projected.y * 0.5 + 0.5) * container.clientHeight;
-        tooltip.textContent = target.userData.label;
-        tooltip.style.opacity = '1';
-        tooltip.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
-      };
-
-      const handleResize = () => {
-        const { clientWidth: width, clientHeight: height } = container;
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        renderer.setSize(width, height);
-      };
-
-      if ('ResizeObserver' in window) {
-        const resizeObserver = new ResizeObserver((entries) => {
-          for (const entry of entries) {
-            const { width, height } = entry.contentRect;
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-          }
-        });
-        resizeObserver.observe(container);
-      } else {
-        window.addEventListener('resize', handleResize);
-      }
-
-      const onPointerMove = (event) => {
-        const rect = container.getBoundingClientRect();
-        pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      };
-
-      const onPointerLeave = () => {
-        pointer.set(2, 2);
-        hoveredTransmission = null;
-        updateTooltipPosition(null);
-      };
-
-      const onPointerDown = () => container.classList.add('hero__hologram--dragging');
-      const onPointerUp = () => container.classList.remove('hero__hologram--dragging');
-
-      container.addEventListener('pointermove', onPointerMove);
-      container.addEventListener('pointerleave', onPointerLeave);
-      container.addEventListener('pointerdown', onPointerDown);
-      container.addEventListener('pointerup', onPointerUp);
-      window.addEventListener('pointerup', onPointerUp);
-
-      container.addEventListener('click', (event) => {
-        if (hoveredTransmission && hoveredTransmission.userData?.id) {
-          event.preventDefault();
-          const target = document.getElementById(hoveredTransmission.userData.id);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-      });
-
-      const clock = new THREE.Clock();
-
-      const findTransmission = (object) => {
-        let current = object;
-        while (current && !current.userData?.id) {
-          current = current.parent;
-        }
-        return transmissionMeshes.includes(current) ? current : null;
-      };
-
-      const animate = () => {
-        requestAnimationFrame(animate);
-        const delta = clock.getDelta();
-        time += delta;
-
-        planetGroup.rotation.y += delta * 0.2;
-
-        transmissionMeshes.forEach((transmission, index) => {
-          const isHovered = hoveredTransmission === transmission;
-          const marker = transmission.getObjectByName('marker');
-          const pulse = transmission.getObjectByName('pulse');
-          const glyph = transmission.getObjectByName('glyph');
-          const beam = transmission.getObjectByName('beam');
-
-          if (pulse) {
-            const pulseScale = 1 + Math.sin(time * 3 + index) * 0.1;
-            pulse.scale.setScalar(pulseScale);
-            pulse.material.opacity = 0.22 + Math.sin(time * 2 + index) * 0.05 + (isHovered ? 0.2 : 0);
-          }
-
-          if (marker) {
-            marker.scale.setScalar(isHovered ? 1.7 : 1);
-          }
-
-          if (glyph) {
-            glyph.rotation.z = time * 1.4 + index * 0.4;
-            glyph.material.opacity = 0.18 + Math.sin(time * 1.3 + index) * 0.04 + (isHovered ? 0.12 : 0);
-          }
-
-          if (beam) {
-            const baseOpacity = 0.35 + Math.sin(time * 2 + index) * 0.08;
-            beam.material.opacity = isHovered ? 0.75 : baseOpacity;
-          }
-        });
-
-        raycaster.setFromCamera(pointer, camera);
-        const intersects = raycaster.intersectObjects(transmissionMeshes, true);
-        const newHover = intersects.length ? findTransmission(intersects[0].object) : null;
-
-        if (newHover !== hoveredTransmission) {
-          hoveredTransmission = newHover;
-          if (hoveredTransmission) {
-            container.classList.add('hero__hologram--active');
-          } else {
-            container.classList.remove('hero__hologram--active');
-          }
-        }
-
-        updateTooltipPosition(hoveredTransmission);
-
-        controls.update();
-        renderer.render(scene, camera);
-      };
-
-      animate();
-
-      const updatePlanetScale = (radius) => {
-        updateTransmissionPlacement(radius);
-        updateAtmosphereGeometry(radius);
-        controls.minDistance = radius * 2.3;
-        controls.maxDistance = radius * 4;
-      };
-
-      updatePlanetScale(baseRadius);
-
-      const loader = new GLTFLoader();
-      const modelUrl = new URL('./assets/models/planet.glb', import.meta.url);
-      loader.load(
-        modelUrl.href,
-        (gltf) => {
-          const planetModel = gltf.scene;
-          planetModel.traverse((child) => {
-            if (child.isMesh) {
-              child.material = child.material.clone();
-              child.material.metalness = 0.45;
-              child.material.roughness = 0.28;
-              if ('emissive' in child.material) {
-                child.material.emissive = new THREE.Color(0x120a2a);
-                child.material.emissiveIntensity = 0.7;
-              }
-            }
-          });
-
-          const box = new THREE.Box3().setFromObject(planetModel);
-          const size = new THREE.Vector3();
-          box.getSize(size);
-          const maxDimension = Math.max(size.x, size.y, size.z);
-          if (maxDimension > 0) {
-            const targetDiameter = baseRadius * 2;
-            const scale = targetDiameter / maxDimension;
-            planetModel.scale.setScalar(scale);
-          }
-
-          box.setFromObject(planetModel);
-          const sphere = new THREE.Sphere();
-          box.getBoundingSphere(sphere);
-
-          planetGroup.add(planetModel);
-
-          planetGroup.remove(placeholderPlanet);
-          placeholderPlanet.geometry.dispose();
-          placeholderPlanet.material.dispose();
-
-          if (!Number.isNaN(sphere.radius) && sphere.radius > 0) {
-            updatePlanetScale(sphere.radius);
-          } else {
-            updatePlanetScale(baseRadius);
-          }
-        },
-        undefined,
-        (error) => {
-          console.error('Failed to load planet model', error);
-        }
-      );
-    }
-  </script>
-
-  <script>
-    const toggle = document.querySelector('.nav__toggle');
-    const menu = document.querySelector('#nav-menu');
-    toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true' || false;
-      toggle.setAttribute('aria-expanded', !expanded);
-      menu.classList.toggle('nav__links--open');
-    });
-
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  </div>
+  <script type="module" src="assets/js/inspector.js"></script>
 </body>
 </html>
