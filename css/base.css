@@ -1,20 +1,25 @@
 :root {
   color-scheme: dark;
-  --bg: #010409;
-  --bg-outer: #040b11;
-  --bg-inner: #020f0a;
-  --grid: rgba(16, 255, 170, 0.05);
-  --terminal-edge: #0a1f18;
-  --terminal-glow: rgba(18, 255, 125, 0.35);
-  --primary: #7bffb0;
-  --primary-strong: #d7ffe0;
-  --secondary: #45d3a7;
-  --accent: #2af598;
-  --text: #a7ffcb;
-  --text-dim: rgba(167, 255, 203, 0.65);
-  --danger: #ff4f6d;
-  --font-heading: 'Orbitron', system-ui;
-  --font-mono: 'Share Tech Mono', 'IBM Plex Mono', Menlo, monospace;
+  --body-bg: radial-gradient(circle at 20% 20%, #1d2733 0%, #0b1019 55%, #04070d 100%);
+  --body-grid: rgba(120, 216, 255, 0.08);
+  --monitor-shell: #d9d5c7;
+  --monitor-shell-dark: #b8b2a3;
+  --monitor-shell-light: #f1ece1;
+  --monitor-screen: #04111d;
+  --monitor-glow: #0d425d;
+  --monitor-glass: rgba(18, 82, 112, 0.55);
+  --accent-green: #7ef5b5;
+  --accent-cyan: #53e3f9;
+  --accent-blue: #246d9a;
+  --accent-amber: #ffc778;
+  --text-primary: #e7f6ff;
+  --text-secondary: #97d0e5;
+  --text-muted: rgba(151, 208, 229, 0.6);
+  --shadow-strong: rgba(5, 16, 28, 0.65);
+  --shadow-soft: rgba(8, 24, 40, 0.45);
+  --font-display: 'Press Start 2P', system-ui, sans-serif;
+  --font-body: 'VT323', 'Share Tech Mono', monospace;
+  --focus-outline: 0 0 0 2px var(--accent-cyan), 0 0 0 5px rgba(83, 227, 249, 0.35);
 }
 
 * {
@@ -29,15 +34,12 @@ body {
 }
 
 body {
-  background: radial-gradient(circle at center, var(--bg-inner) 0%, var(--bg-outer) 55%, #000 100%);
-  color: var(--text);
-  font-family: var(--font-mono);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(1.5rem, 4vh, 2.5rem) clamp(1rem, 4vw, 1.5rem);
-  position: relative;
+  font-family: var(--font-body);
+  background: var(--body-bg);
+  color: var(--text-primary);
   min-height: 100vh;
+  display: block;
+  position: relative;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -46,85 +48,42 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(42, 245, 152, 0.12) 0%, transparent 60%);
-  mix-blend-mode: screen;
+  background-image: linear-gradient(90deg, transparent 0 22px, var(--body-grid) 22px 23px),
+    linear-gradient(0deg, transparent 0 22px, var(--body-grid) 22px 23px);
+  background-size: 23px 23px;
+  opacity: 0.18;
   pointer-events: none;
   z-index: 0;
 }
 
-.crt-overlay {
-  position: fixed;
-  inset: 0;
-  background-image:
-    radial-gradient(circle at center, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.62) 70%),
-    repeating-radial-gradient(
-      circle at center,
-      rgba(123, 255, 176, 0.09) 0,
-      rgba(123, 255, 176, 0.09) 0.6px,
-      transparent 0.6px,
-      transparent 2.6px
-    ),
-    repeating-linear-gradient(
-      to bottom,
-      rgba(123, 255, 176, 0.12) 0,
-      rgba(123, 255, 176, 0.12) 2px,
-      transparent 2px,
-      transparent 4px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      rgba(42, 245, 152, 0.05) 0,
-      rgba(42, 245, 152, 0.05) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-  background-size: 100% 100%, 4px 4px, 100% 4px, 4px 100%;
-  opacity: 0.94;
-  pointer-events: none;
-  z-index: 10;
-  mix-blend-mode: screen;
-  filter: saturate(1.18) contrast(1.12) brightness(0.96);
-  animation: crtPulse 6s ease-in-out infinite, crtWobble 120ms steps(1) infinite;
+[hidden] {
+  display: none !important;
 }
 
-.crt-overlay::after {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  background: radial-gradient(circle at 20% 20%, rgba(123, 255, 176, 0.12) 0, transparent 35%),
-    radial-gradient(circle at 80% 35%, rgba(42, 245, 152, 0.1) 0, transparent 30%),
-    repeating-linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0,
-      rgba(0, 0, 0, 0) 6px,
-      rgba(0, 0, 0, 0.18) 6px,
-      rgba(0, 0, 0, 0.18) 7px
-    );
-  opacity: 0.4;
-  pointer-events: none;
-  mix-blend-mode: color-dodge;
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
 }
 
-@keyframes crtPulse {
-  0%,
-  100% {
-    opacity: 0.88;
-  }
-  50% {
-    opacity: 0.97;
-  }
+button {
+  cursor: pointer;
 }
 
-@keyframes crtWobble {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-0.6px);
-  }
-  100% {
-    transform: translateY(0.4px);
-  }
+a {
+  color: var(--accent-cyan);
+}
+
+a:hover {
+  color: var(--accent-green);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-outline);
 }
 
 .visually-hidden {

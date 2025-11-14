@@ -3,110 +3,250 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeremy Hummel | Orbital Signal Inspector</title>
+  <title>Jeremy Hummel | Retro Desktop Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+    rel="stylesheet"
+  >
   <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/layout/terminal-shell.css">
-  <link rel="stylesheet" href="css/layout/landing.css">
-  <link rel="stylesheet" href="css/layout/inspector.css">
-  <link rel="stylesheet" href="css/components/popup.css">
-  <link rel="stylesheet" href="css/components/loading-bar.css">
+  <link rel="stylesheet" href="css/retro-desktop.css">
 </head>
 <body>
-  <div class="crt-overlay" aria-hidden="true"></div>
-  <div class="terminal-frame">
-    <div class="terminal-bezel">
-      <header class="terminal-header">
-        <span class="terminal-header__lamp" aria-hidden="true"></span>
-        <div class="terminal-header__meta">
-          <span class="terminal-header__id">JH-OS // REMOTE OPS CONSOLE</span>
-          <span class="terminal-header__status" id="terminal-status">STANDBY</span>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="retro-os">
+    <header class="os-header" aria-label="Retro OS masthead">
+      <span class="os-header__brand">SYNTHWORKS // RETRO OS</span>
+      <span class="os-header__status" aria-hidden="true"></span>
+    </header>
+    <main class="os-main" role="main">
+      <section class="screen screen--login" data-screen="login" aria-label="Retro OS login">
+        <form class="login-panel login-form" autocomplete="off" novalidate>
+          <h1 class="login-panel__title">ACCESS TERMINAL</h1>
+          <p class="login-panel__hint">Enter your username to initialize Retro OS.</p>
+          <label class="login-panel__label" for="username-input">USERNAME</label>
+          <div class="login-panel__field">
+            <span class="login-panel__prompt" aria-hidden="true">C:\&gt;</span>
+            <input
+              id="username-input"
+              class="login-panel__input"
+              name="username"
+              type="text"
+              placeholder="guest"
+              maxlength="32"
+              required
+              aria-describedby="login-hint"
+            >
+          </div>
+          <p id="login-hint" class="visually-hidden">Type any username to boot the retro desktop.</p>
+          <div class="login-panel__actions">
+            <button class="login-panel__submit" type="submit">Boot System</button>
+          </div>
+          <p class="login-panel__error" role="alert" aria-live="assertive" hidden></p>
+        </form>
+      </section>
+
+      <section class="screen screen--loading" data-screen="loading" aria-label="Boot sequence" hidden>
+        <div class="loading-panel">
+          <h2 class="loading-panel__title">Loading Retro OS...</h2>
+          <p class="loading-panel__status">Verifying BIOS checksum</p>
+          <div class="loading-panel__bar" role="progressbar" aria-live="polite" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="loading-panel__progress"></div>
+          </div>
+          <ul class="loading-panel__log" aria-live="polite"></ul>
         </div>
-      </header>
-      <main class="terminal-screen" aria-live="polite">
-        <section class="scene landing scene--active" data-scene="landing" aria-label="Access console">
-          <div class="landing__console" role="region" aria-label="Orbital access console">
-            <div class="landing__log" role="log" aria-live="polite"></div>
-            <form class="landing-form" autocomplete="off" novalidate>
-              <label for="call-sign">Console input</label>
-              <div class="landing-form__input">
-                <span class="landing-form__caret" aria-hidden="true">jh-os@relay:~$</span>
-                <input id="call-sign" name="call-sign" type="text" placeholder="enter call sign" required maxlength="40" aria-describedby="console-hint">
-              </div>
-              <button class="landing-form__submit" type="submit">Execute</button>
-              <p class="landing-form__hint" id="console-hint">Identify with your call sign to unlock the console.</p>
-              <p class="landing-form__error" role="alert" aria-live="assertive" hidden></p>
-            </form>
-          </div>
-        </section>
-        <section class="scene inspector" data-scene="inspector" aria-label="Planetary signal inspector" aria-hidden="true">
-          <div class="inspector__header">
-            <h1 class="inspector__title">Orbital Signal Inspector</h1>
-            <p class="inspector__subtitle">Rotate the planet · lock onto a signal · decrypt the transmission</p>
-          </div>
-          <div class="inspector__viewer">
-            <div class="inspector__display">
-              <canvas id="planet-canvas" width="960" height="720" aria-label="3D planet visualization">
-                Your device does not support the WebGL inspector.
-              </canvas>
-              <div class="inspector__overlay">TRACKING SIGNALS...</div>
+      </section>
+
+      <section class="screen screen--desktop" data-screen="desktop" aria-label="Retro desktop" hidden>
+        <div class="desktop">
+          <div class="desktop__workspace" data-workspace>
+            <div class="desktop__icons" role="list">
+              <button class="desktop-icon" type="button" data-open="about" data-grid-x="0" data-grid-y="0" role="listitem">
+                <span class="desktop-icon__glyph" aria-hidden="true">TXT</span>
+                <span class="desktop-icon__label">about-me.txt</span>
+              </button>
+              <button class="desktop-icon" type="button" data-open="contact" data-grid-x="0" data-grid-y="1" role="listitem">
+                <span class="desktop-icon__glyph" aria-hidden="true">EXE</span>
+                <span class="desktop-icon__label">contact.exe</span>
+              </button>
+              <button class="desktop-icon" type="button" data-open="resume" data-grid-x="0" data-grid-y="2" role="listitem">
+                <span class="desktop-icon__glyph" aria-hidden="true">PDF</span>
+                <span class="desktop-icon__label">resume.pdf</span>
+              </button>
+              <button class="desktop-icon" type="button" data-open="blog" data-grid-x="1" data-grid-y="0" role="listitem">
+                <span class="desktop-icon__glyph" aria-hidden="true">HTML</span>
+                <span class="desktop-icon__label">blog.html</span>
+              </button>
+              <button class="desktop-icon" type="button" data-open="portfolio" data-grid-x="1" data-grid-y="1" role="listitem">
+                <span class="desktop-icon__glyph" aria-hidden="true">DIR</span>
+                <span class="desktop-icon__label">portfolio</span>
+              </button>
             </div>
-          </div>
-          <footer class="inspector__transmission" aria-label="Transmission contact channels">
-            <div class="inspector__transmission-intro">
-              <h2>Transmission uplink</h2>
-              <p>Route a message through any channel below to initiate collaboration.</p>
-            </div>
-            <dl class="inspector__transmission-grid">
-              <div class="inspector__transmission-item">
-                <dt>Direct frequency</dt>
-                <dd><a href="mailto:hello@jeremyhummel.com">hello@jeremyhummel.com</a></dd>
+
+            <article
+              class="window"
+              data-window="about"
+              data-window-taskbar="about-me.txt"
+              data-window-icon="TXT"
+              aria-label="about-me.txt"
+              hidden
+            >
+              <header class="window__titlebar">
+                <span>ABOUT-ME.TXT</span>
+                <div class="window__controls">
+                  <button class="window__close" type="button" data-window-close aria-label="Close about-me.txt">×</button>
+                </div>
+              </header>
+              <div class="window__content">
+                <div class="window__markdown" data-markdown-target="about" aria-live="polite">Loading about-me.txt…</div>
               </div>
-              <div class="inspector__transmission-item">
-                <dt>Secure channel</dt>
-                <dd><a href="https://www.linkedin.com/in/jeremyhummel/" target="_blank" rel="noopener">linkedin.com/in/jeremyhummel</a></dd>
+            </article>
+
+            <article
+              class="window"
+              data-window="contact"
+              data-window-taskbar="contact.exe"
+              data-window-icon="EXE"
+              aria-label="contact.exe"
+              hidden
+            >
+              <header class="window__titlebar">
+                <span>CONTACT.EXE</span>
+                <div class="window__controls">
+                  <button class="window__close" type="button" data-window-close aria-label="Close contact.exe">×</button>
+                </div>
+              </header>
+              <div class="window__content">
+                <div class="window__markdown" data-markdown-target="contact" aria-live="polite">Loading contact.exe…</div>
+                <button class="button-pill button-pill--ghost" type="button" data-contact-launch disabled>Run contact.exe</button>
               </div>
-              <div class="inspector__transmission-item">
-                <dt>Code relay</dt>
-                <dd><a href="https://github.com/jeremyhummel" target="_blank" rel="noopener">github.com/jeremyhummel</a></dd>
+            </article>
+
+            <article
+              class="window"
+              data-window="resume"
+              data-window-taskbar="resume.pdf"
+              data-window-icon="PDF"
+              aria-label="resume.pdf"
+              hidden
+            >
+              <header class="window__titlebar">
+                <span>RESUME.PDF</span>
+                <div class="window__controls">
+                  <button class="window__close" type="button" data-window-close aria-label="Close resume.pdf">×</button>
+                </div>
+              </header>
+              <div class="window__content">
+                <div class="window__markdown" data-markdown-target="resume" aria-live="polite">Loading resume.pdf…</div>
               </div>
-            </dl>
-          </footer>
-        </section>
+            </article>
+
+            <article
+              class="window window--wide"
+              data-window="blog"
+              data-window-taskbar="blog.html"
+              data-window-icon="HTML"
+              aria-label="blog.html"
+              hidden
+            >
+              <header class="window__titlebar">
+                <span>BLOG.HTML</span>
+                <div class="window__controls">
+                  <button class="window__close" type="button" data-window-close aria-label="Close blog.html">×</button>
+                </div>
+              </header>
+              <div class="window__content">
+                <div class="blog" data-blog>
+                  <div class="blog__files" role="list" data-blog-list>
+                    <button class="blog__file" type="button" data-blog-entry="cats.md" role="listitem">cats.md</button>
+                    <button class="blog__file" type="button" data-blog-entry="dogs.md" role="listitem">dogs.md</button>
+                  </div>
+                  <div class="blog__viewer">
+                    <h3 class="blog__title" data-blog-title aria-live="polite">Blog Entry</h3>
+                    <p class="blog__summary" data-blog-summary aria-live="polite">Select a post to read the full entry.</p>
+                    <ul class="blog__tags" data-blog-tags aria-live="polite"></ul>
+                    <div class="window__markdown" data-blog-body aria-live="polite"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="window window--wide"
+              data-window="portfolio"
+              data-window-taskbar="portfolio"
+              data-window-icon="DIR"
+              aria-label="portfolio folder"
+              hidden
+            >
+              <header class="window__titlebar">
+                <span>PORTFOLIO</span>
+                <div class="window__controls">
+                  <button class="window__close" type="button" data-window-close aria-label="Close portfolio folder">×</button>
+                </div>
+              </header>
+              <div class="window__content">
+                <div class="portfolio" data-portfolio>
+                  <div class="portfolio__files" role="list">
+                    <button class="portfolio__file is-active" type="button" data-file="signal-tracker.md" role="listitem">signal-tracker.md</button>
+                    <button class="portfolio__file" type="button" data-file="vector-console.md" role="listitem">vector-console.md</button>
+                    <button class="portfolio__file" type="button" data-file="echoes-lab.md" role="listitem">echoes-lab.md</button>
+                  </div>
+                  <div class="portfolio__details">
+                    <h3 class="portfolio__title" data-portfolio-title aria-live="polite">Signal Tracker</h3>
+                    <p class="portfolio__summary" data-portfolio-summary aria-live="polite">
+                      Loading project details…
+                    </p>
+                    <ul class="window__list" data-portfolio-tags aria-live="polite"></ul>
+                    <a
+                      class="portfolio__link"
+                      data-portfolio-link
+                      target="_blank"
+                      rel="noopener"
+                      aria-disabled="true"
+                    >Link unavailable</a>
+                    <div class="portfolio__body window__markdown" data-portfolio-body aria-live="polite"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+                </div>
+
+                <footer class="desktop__taskbar" aria-label="System task bar">
+                  <button class="taskbar__start" type="button" aria-label="Open start menu" disabled>RETRO</button>
+                  <div class="taskbar__apps" data-taskbar-apps role="list"></div>
+                  <div class="desktop__status">
+                    <span data-user-label>USER: GUEST</span>
+                    <span>SYSTEM: ONLINE</span>
+                    <time class="desktop__clock" data-clock aria-live="polite">00:00</time>
+                  </div>
+                </footer>
+
+                <div class="modal" data-modal="welcome" role="dialog" aria-modal="true" hidden>
+                  <div class="modal__panel" role="document">
+                    <h2 class="modal__title">Welcome to Retro OS</h2>
+                    <p class="modal__message" data-welcome-message>Greetings, Operator.</p>
+                    <button class="button-pill" type="button" data-modal-close>Enter desktop</button>
+                  </div>
+                </div>
+
+                <div class="modal modal--contact" data-modal="contact" role="dialog" aria-modal="true" hidden>
+                  <div class="modal__panel" role="document">
+                    <h2 class="modal__title">CONTACT.EXE OUTPUT</h2>
+                    <p class="modal__message" data-contact-message>Choose a channel to transmit.</p>
+                    <div class="modal__actions">
+                      <a class="button-pill" data-contact-email href="mailto:hello@example.com" hidden>Email</a>
+                      <a class="button-pill" data-contact-linkedin href="https://www.linkedin.com" target="_blank" rel="noopener" hidden>LinkedIn</a>
+                    </div>
+                    <button class="button-pill button-pill--ghost" type="button" data-contact-close>Close</button>
+                  </div>
+                </div>
+              </div>
+            </section>
       </main>
     </div>
-  </div>
 
-  <div class="signal-popup" aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="signal-popup__backdrop" data-popup-close></div>
-    <div class="signal-popup__panel" role="document">
-      <button class="signal-popup__close" type="button" aria-label="Close signal details" data-popup-close>&times;</button>
-      <p class="signal-popup__channel"></p>
-      <h2 class="signal-popup__title"></h2>
-      <p class="signal-popup__tagline"></p>
-      <p class="signal-popup__summary"></p>
-      <section class="signal-popup__stack" aria-label="Technology stack">
-        <h3>Stack</h3>
-        <ul class="signal-popup__stack-list"></ul>
-      </section>
-      <section class="signal-popup__log" aria-label="Transmission log">
-        <h3>Transmission Log</h3>
-        <pre class="signal-popup__log-entries"></pre>
-      </section>
-    </div>
-  </div>
-
-  <div class="loading-overlay" aria-hidden="true" role="status">
-    <div class="loading-overlay__panel">
-      <p class="loading-overlay__label">Decrypting signal</p>
-      <div class="loading-overlay__bar">
-        <div class="loading-overlay__progress"></div>
-      </div>
-    </div>
-  </div>
-
-  <script type="module" src="js/main.js"></script>
+  <script src="js/main.js" type="module"></script>
 </body>
 </html>
