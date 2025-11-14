@@ -18,30 +18,46 @@ const welcomeModal = document.querySelector('[data-modal="welcome"]');
 const welcomeMessage = document.querySelector('[data-welcome-message]');
 const welcomeClose = welcomeModal?.querySelector('[data-modal-close]');
 
-const userLabel = document.querySelector('[data-user-label]');
 const clockLabel = document.querySelector('[data-clock]');
+const dateLabel = document.querySelector('[data-date]');
 const workspace = document.querySelector('[data-workspace]');
 const taskbar = document.querySelector('[data-taskbar-apps]');
+const overflowButton = document.querySelector('[data-taskbar-overflow]');
+const overflowMenu = document.querySelector('[data-taskbar-overflow-menu]');
+const startButton = document.querySelector('[data-start-button]');
+const startPanel = document.querySelector('[data-start-panel]');
+const startSearchInput = document.querySelector('[data-start-search]');
+const startResults = document.querySelector('[data-start-results]');
+const startUserLabel = document.querySelector('[data-start-user]');
+const logoutButton = document.querySelector('[data-logout]');
 
 const ICON_GRID_WIDTH = 120;
 const ICON_GRID_HEIGHT = 120;
 
-const markdownTargets = new Map(
-  Array.from(document.querySelectorAll('[data-markdown-target]')).map((el) => [el.dataset.markdownTarget, el])
+const htmlTargets = new Map(
+  Array.from(document.querySelectorAll('[data-html-target]')).map((el) => [el.dataset.htmlTarget, el])
 );
 
-const markdownSources = new Map([
-  ['about', 'assets/desktop/about-me.md'],
-  ['resume', 'assets/desktop/resume.md'],
+const htmlSources = new Map([
+  ['about', 'assets/desktop/about-me.html'],
+  ['resume', 'assets/desktop/resume.html'],
 ]);
+
+const CONTACT_SOURCE = 'assets/desktop/contact.html';
 
 const windows = new Map(
   Array.from(document.querySelectorAll('[data-window]')).map((el) => [el.dataset.window, el])
 );
 
+const icons = Array.from(document.querySelectorAll('[data-open]'));
+
 const taskbarItems = new Map();
 
-const icons = Array.from(document.querySelectorAll('[data-open]'));
+const desktopSearchIndex = icons.map((icon) => ({
+  id: icon.dataset.open,
+  label: icon.querySelector('.desktop-icon__label')?.textContent.trim() || icon.dataset.open || 'File',
+  glyph: icon.querySelector('.desktop-icon__glyph')?.textContent.trim() || '',
+}));
 
 const portfolioButtons = Array.from(document.querySelectorAll('[data-file]'));
 const portfolioTitle = document.querySelector('[data-portfolio-title]');
@@ -68,7 +84,7 @@ const contactLinkedInLink = document.querySelector('[data-contact-linkedin]');
 const contactCloseButton = document.querySelector('[data-contact-close]');
 let contactEntry = null;
 
-const markdownCache = new Map();
+const htmlCache = new Map();
 
 let activeUser = 'Guest';
 let selectedIcon = null;
@@ -146,18 +162,26 @@ async function runBootSequence(username) {
 
 function updateUser(username) {
   activeUser = username;
-  if (userLabel) {
-    userLabel.textContent = `USER: ${username.toUpperCase()}`;
+  if (startUserLabel) {
+    startUserLabel.textContent = username.toUpperCase();
   }
   document.title = `Retro OS | ${username.toUpperCase()}`;
 }
 
 function updateClock() {
-  if (!clockLabel) return;
   const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  clockLabel.textContent = `${hours}:${minutes}`;
+  if (clockLabel) {
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    clockLabel.textContent = `${hours}:${minutes}`;
+  }
+  if (dateLabel) {
+    const formattedDate = now.toLocaleDateString(undefined, {
+      month: 'short',
+      day: '2-digit',
+    });
+    dateLabel.textContent = formattedDate;
+  }
 }
 
 function openWelcome(username) {
@@ -205,6 +229,7 @@ function ensureTaskbarItem(name) {
 
   taskbar.append(button);
   taskbarItems.set(name, button);
+  updateTaskbarOverflow();
   return button;
 }
 
@@ -226,6 +251,7 @@ function deactivateTaskbarItem(name) {
   if (!button) return;
   button.classList.remove('is-active');
   button.setAttribute('aria-pressed', 'false');
+  updateTaskbarOverflow();
 }
 
 function removeTaskbarItem(name) {
@@ -233,6 +259,245 @@ function removeTaskbarItem(name) {
   if (!button) return;
   button.remove();
   taskbarItems.delete(name);
+  updateTaskbarOverflow();
+}
+
+function closeOverflowMenu() {
+  if (!overflowMenu || !overflowButton) return;
+  overflowMenu.hidden = true;
+  overflowButton.setAttribute('aria-expanded', 'false');
+}
+
+function updateOverflowMenuItems(hiddenButtons) {
+  if (!overflowMenu) return;
+  overflowMenu.innerHTML = '';
+
+  if (!hiddenButtons.length) {
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  hiddenButtons.forEach((btn) => {
+    const name = btn.dataset.taskbarItem || '';
+    const label = btn.querySelector('.taskbar__label')?.textContent.trim() || name || 'Application';
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'taskbar__overflow-item';
+    item.setAttribute('role', 'menuitem');
+    item.textContent = label;
+    if (btn.classList.contains('is-active')) {
+      item.classList.add('is-active');
+    }
+    item.addEventListener('click', () => {
+      if (name) {
+        toggleWindowFromTaskbar(name);
+      }
+      closeOverflowMenu();
+    });
+    fragment.append(item);
+  });
+
+  overflowMenu.append(fragment);
+}
+
+function updateTaskbarOverflow() {
+  if (!taskbar || !overflowButton || !overflowMenu) {
+    return;
+  }
+
+  const buttons = Array.from(taskbar.querySelectorAll('.taskbar__button'));
+
+  buttons.forEach((btn) => {
+    btn.hidden = false;
+    btn.dataset.taskbarOverflow = 'false';
+  });
+
+  closeOverflowMenu();
+  overflowButton.hidden = true;
+  updateOverflowMenuItems([]);
+
+  if (!buttons.length) {
+    return;
+  }
+
+  const style = window.getComputedStyle(taskbar);
+  const gap = Number.parseFloat(style.columnGap || style.gap || '0');
+  const availableWidth = taskbar.clientWidth;
+  let usedWidth = 0;
+  const overflowed = [];
+
+  buttons.forEach((btn, index) => {
+    const buttonWidth = Math.ceil(btn.offsetWidth);
+    const nextWidth = index === 0 ? buttonWidth : usedWidth + gap + buttonWidth;
+    if (nextWidth <= availableWidth) {
+      usedWidth = nextWidth;
+      btn.hidden = false;
+      btn.dataset.taskbarOverflow = 'false';
+    } else {
+      btn.hidden = true;
+      btn.dataset.taskbarOverflow = 'true';
+      overflowed.push(btn);
+    }
+  });
+
+  if (overflowed.length) {
+    overflowButton.hidden = false;
+    updateOverflowMenuItems(overflowed);
+  }
+}
+
+function toggleOverflowMenu() {
+  if (!overflowMenu || !overflowButton) return;
+  if (overflowMenu.hidden) {
+    if (!overflowMenu.childElementCount) {
+      return;
+    }
+    overflowMenu.hidden = false;
+    overflowButton.setAttribute('aria-expanded', 'true');
+  } else {
+    closeOverflowMenu();
+  }
+}
+
+function renderSearchResults(query = '') {
+  if (!startResults) return;
+  const normalized = query.trim().toLowerCase();
+  const matches = normalized
+    ? desktopSearchIndex.filter((entry) => {
+        const label = entry.label.toLowerCase();
+        const id = entry.id?.toLowerCase() || '';
+        return label.includes(normalized) || id.includes(normalized);
+      })
+    : desktopSearchIndex;
+
+  startResults.innerHTML = '';
+
+  if (!matches.length) {
+    const emptyItem = document.createElement('li');
+    emptyItem.className = 'start-menu__empty';
+    emptyItem.textContent = 'No files found';
+    startResults.append(emptyItem);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  matches.forEach((entry) => {
+    const item = document.createElement('li');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'start-menu__result';
+    button.dataset.startResult = entry.id || '';
+    button.setAttribute('role', 'option');
+    button.innerHTML = `
+      <span class="start-menu__result-glyph" aria-hidden="true">${entry.glyph}</span>
+      <span class="start-menu__result-label">${entry.label}</span>
+    `;
+    button.addEventListener('click', () => {
+      if (entry.id) {
+        openWindow(entry.id);
+      }
+      closeStartPanel();
+    });
+    item.append(button);
+    fragment.append(item);
+  });
+
+  startResults.append(fragment);
+}
+
+function openStartPanel() {
+  if (!startPanel) return;
+  startPanel.hidden = false;
+  startButton?.setAttribute('aria-expanded', 'true');
+  renderSearchResults(startSearchInput?.value || '');
+  requestAnimationFrame(() => {
+    startSearchInput?.focus();
+    startSearchInput?.select();
+  });
+}
+
+function closeStartPanel() {
+  if (!startPanel) return;
+  if (startPanel.hidden) {
+    return;
+  }
+  startPanel.hidden = true;
+  startButton?.setAttribute('aria-expanded', 'false');
+}
+
+function toggleStartPanel() {
+  if (!startPanel) return;
+  if (startPanel.hidden) {
+    openStartPanel();
+  } else {
+    closeStartPanel();
+  }
+}
+
+function logoutUser() {
+  closeStartPanel();
+  closeOverflowMenu();
+
+  windows.forEach((win) => {
+    win.hidden = true;
+    win.classList.remove('is-active');
+    win.style.left = '';
+    win.style.top = '';
+    win.style.zIndex = '';
+    delete win.dataset.positioned;
+  });
+
+  clearIconSelection();
+  selectedIcon = null;
+  windowSpawnIndex = 0;
+  zIndexCursor = 20;
+
+  Array.from(taskbarItems.keys()).forEach((name) => {
+    removeTaskbarItem(name);
+  });
+  updateTaskbarOverflow();
+
+  closeWelcome();
+  closeContactModal();
+  contactEntry = null;
+
+  const contactTarget = htmlTargets.get('contact');
+  if (contactTarget) {
+    delete contactTarget.dataset.loaded;
+    contactTarget.innerHTML = 'Loading contact.exe…';
+  }
+
+  if (contactLaunchButton) {
+    contactLaunchButton.disabled = true;
+    contactLaunchButton.textContent = 'Loading contact.exe…';
+  }
+
+  if (contactEmailLink) {
+    contactEmailLink.hidden = true;
+  }
+
+  if (contactLinkedInLink) {
+    contactLinkedInLink.hidden = true;
+  }
+
+  showScreen('login');
+  updateUser('Guest');
+
+  if (startSearchInput) {
+    startSearchInput.value = '';
+  }
+  renderSearchResults('');
+
+  if (startButton) {
+    startButton.disabled = true;
+  }
+
+  if (loginButton) {
+    loginButton.disabled = false;
+    loginButton.textContent = 'Boot System';
+  }
+
+  usernameInput?.focus();
 }
 
 function bringWindowToFront(win) {
@@ -337,6 +602,7 @@ function closeWindow(win) {
   if (name) {
     removeTaskbarItem(name);
   }
+  updateTaskbarOverflow();
 }
 
 function toggleWindowFromTaskbar(name) {
@@ -492,6 +758,59 @@ function initializeIcons() {
   layoutIcons();
 }
 
+function initializeStartMenu() {
+  renderSearchResults('');
+
+  startButton?.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleStartPanel();
+  });
+
+  startSearchInput?.addEventListener('input', () => {
+    renderSearchResults(startSearchInput.value);
+  });
+
+  startSearchInput?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      const firstResult = startResults?.querySelector('.start-menu__result');
+      if (firstResult) {
+        event.preventDefault();
+        firstResult.click();
+      }
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      closeStartPanel();
+      startButton?.focus();
+    }
+  });
+
+  logoutButton?.addEventListener('click', () => {
+    logoutUser();
+  });
+
+  overflowButton?.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleOverflowMenu();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (startPanel && !startPanel.hidden) {
+      const target = event.target;
+      if (target instanceof Node && !startPanel.contains(target) && target !== startButton) {
+        closeStartPanel();
+      }
+    }
+    if (overflowMenu && !overflowMenu.hidden) {
+      const target = event.target;
+      if (target instanceof Node && !overflowMenu.contains(target) && target !== overflowButton) {
+        closeOverflowMenu();
+      }
+    }
+  });
+}
+
 function initializeWindowControls() {
   windows.forEach((win) => {
     const closeButton = win.querySelector('[data-window-close]');
@@ -563,150 +882,9 @@ function initializeWorkspace() {
   });
 }
 
-function escapeHTML(value) {
-  return value.replace(/[&<>"']/g, (char) => {
-    switch (char) {
-      case '&':
-        return '&amp;';
-      case '<':
-        return '&lt;';
-      case '>':
-        return '&gt;';
-      case '"':
-        return '&quot;';
-      case "'":
-        return '&#39;';
-      default:
-        return char;
-    }
-  });
-}
-
-function escapeAttribute(value) {
-  return value.replace(/["'<>&\s]/g, (char) => {
-    switch (char) {
-      case '"':
-        return '&quot;';
-      case "'":
-        return '&#39;';
-      case '<':
-        return '&lt;';
-      case '>':
-        return '&gt;';
-      case '&':
-        return '&amp;';
-      case ' ':
-        return '%20';
-      default:
-        return char;
-    }
-  });
-}
-
-function formatInlineMarkdown(text) {
-  let formatted = escapeHTML(text);
-
-  formatted = formatted.replace(/`([^`]+)`/g, (_, code) => `<code>${code}</code>`);
-  formatted = formatted.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-  formatted = formatted.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-  formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, url) => {
-    const safeUrl = escapeAttribute(url.trim());
-    return `<a href="${safeUrl}" target="_blank" rel="noopener">${label}</a>`;
-  });
-
-  return formatted;
-}
-
-function markdownToHTML(markdown) {
-  const lines = markdown.split(/\r?\n/);
-  const html = [];
-  let inList = false;
-
-  const closeList = () => {
-    if (inList) {
-      html.push('</ul>');
-      inList = false;
-    }
-  };
-
-  lines.forEach((rawLine) => {
-    const line = rawLine.trim();
-
-    if (!line) {
-      closeList();
-      return;
-    }
-
-    if (/^#{1,6}\s+/.test(line)) {
-      closeList();
-      const level = Math.min(line.match(/^#+/)[0].length, 3);
-      const content = line.replace(/^#{1,6}\s+/, '');
-      html.push(`<h${level}>${formatInlineMarkdown(content)}</h${level}>`);
-      return;
-    }
-
-    if (/^-\s+/.test(line)) {
-      if (!inList) {
-        html.push('<ul>');
-        inList = true;
-      }
-      const item = line.replace(/^-\s+/, '');
-      html.push(`<li>${formatInlineMarkdown(item)}</li>`);
-      return;
-    }
-
-    closeList();
-    html.push(`<p>${formatInlineMarkdown(line)}</p>`);
-  });
-
-  closeList();
-  return html.join('');
-}
-
-function parseMarkdownDocument(markdown) {
-  const trimmed = markdown.trim();
-  const frontMatterMatch = trimmed.match(/^---\s*\n([\s\S]*?)\n---\s*\n?/);
-  const metadata = {};
-  let body = trimmed;
-
-  if (frontMatterMatch) {
-    const lines = frontMatterMatch[1].split(/\r?\n/);
-    let currentKey = null;
-
-    lines.forEach((rawLine) => {
-      const line = rawLine.trim();
-      if (!line) return;
-
-      if (line.startsWith('-')) {
-        if (currentKey && Array.isArray(metadata[currentKey])) {
-          metadata[currentKey].push(line.replace(/^-[\s]*/, '').trim());
-        }
-        return;
-      }
-
-      const [key, ...rest] = line.split(':');
-      const keyName = key.trim();
-      const value = rest.join(':').trim();
-
-      if (!value) {
-        metadata[keyName] = [];
-        currentKey = keyName;
-      } else {
-        metadata[keyName] = value;
-        currentKey = Array.isArray(metadata[keyName]) ? keyName : null;
-      }
-    });
-
-    body = trimmed.slice(frontMatterMatch[0].length).trim();
-  }
-
-  const summary = body.split(/\n\s*\n/).find((paragraph) => paragraph.trim().length) || '';
-  return { metadata, body, summary };
-}
-
-async function loadMarkdownFile(path) {
-  if (markdownCache.has(path)) {
-    return markdownCache.get(path);
+async function loadHTMLDocument(path) {
+  if (htmlCache.has(path)) {
+    return htmlCache.get(path);
   }
 
   const response = await fetch(path);
@@ -714,10 +892,26 @@ async function loadMarkdownFile(path) {
     throw new Error(`Unable to load ${path}: ${response.status}`);
   }
 
-  const rawMarkdown = await response.text();
-  const parsed = parseMarkdownDocument(rawMarkdown);
-  markdownCache.set(path, parsed);
-  return parsed;
+  const rawHTML = await response.text();
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(rawHTML, 'text/html');
+  const root = doc.querySelector('[data-document]') || doc.body;
+  const dataset = { ...root.dataset };
+  const markup = root.outerHTML.trim();
+  const result = { markup, dataset };
+  htmlCache.set(path, result);
+  return result;
+}
+
+function parseTagList(value) {
+  if (!value) {
+    return [];
+  }
+
+  return value
+    .split(',')
+    .map((tag) => tag.trim())
+    .filter((tag) => tag.length > 0);
 }
 
 async function loadPortfolioEntry(fileName) {
@@ -726,21 +920,14 @@ async function loadPortfolioEntry(fileName) {
   }
 
   const path = `assets/portfolio/${encodeURIComponent(fileName)}`;
-  const { metadata, body, summary } = await loadMarkdownFile(path);
-  const tags = metadata.tags;
-  const normalizedTags = Array.isArray(tags)
-    ? tags
-    : typeof tags === 'string' && tags.trim().length
-    ? [tags.trim()]
-    : [];
-
+  const { markup, dataset } = await loadHTMLDocument(path);
   const entry = {
-    title: metadata.title?.trim() || fileName,
-    summary: metadata.summary?.trim() || summary.trim(),
-    tags: normalizedTags,
-    link: metadata.link?.trim() || '',
-    bodyHTML: body ? markdownToHTML(body) : '',
-    hasBody: Boolean(body && body.trim().length),
+    title: dataset.title?.trim() || fileName,
+    summary: dataset.summary?.trim() || '',
+    tags: parseTagList(dataset.tags),
+    link: dataset.link?.trim() || '',
+    bodyHTML: markup,
+    hasBody: Boolean(markup && markup.trim().length),
   };
 
   portfolioCache.set(fileName, entry);
@@ -779,7 +966,8 @@ async function updatePortfolio(fileName) {
     button.classList.toggle('is-active', button.dataset.file === fileName);
   });
 
-  portfolioTitle.textContent = fileName;
+  const activePortfolioButton = portfolioButtons.find((button) => button.dataset.file === fileName);
+  portfolioTitle.textContent = activePortfolioButton?.textContent.trim() || fileName;
   portfolioSummary.textContent = 'Loading file…';
   portfolioTags.innerHTML = '';
   portfolioBody.innerHTML = '<p>Loading file…</p>';
@@ -821,7 +1009,8 @@ async function updatePortfolio(fileName) {
     }
 
     console.error(error);
-    portfolioTitle.textContent = fileName;
+    const fallbackButton = portfolioButtons.find((button) => button.dataset.file === fileName);
+    portfolioTitle.textContent = fallbackButton?.textContent.trim() || fileName;
     portfolioSummary.textContent = 'Unable to load portfolio file. Please try again later.';
     portfolioTags.innerHTML = '';
     disablePortfolioLink();
@@ -830,9 +1019,9 @@ async function updatePortfolio(fileName) {
   }
 }
 
-async function ensureMarkdownTargetLoaded(key) {
-  const path = markdownSources.get(key);
-  const target = markdownTargets.get(key);
+async function ensureHTMLTargetLoaded(key) {
+  const path = htmlSources.get(key);
+  const target = htmlTargets.get(key);
 
   if (!path || !target) {
     return;
@@ -846,8 +1035,8 @@ async function ensureMarkdownTargetLoaded(key) {
   target.innerHTML = '<p>Loading file…</p>';
 
   try {
-    const { body } = await loadMarkdownFile(path);
-    target.innerHTML = body?.trim().length ? markdownToHTML(body) : '<p>This file is currently empty.</p>';
+    const { markup } = await loadHTMLDocument(path);
+    target.innerHTML = markup?.trim().length ? markup : '<p>This file is currently empty.</p>';
     target.dataset.loaded = 'true';
   } catch (error) {
     console.error(error);
@@ -858,7 +1047,7 @@ async function ensureMarkdownTargetLoaded(key) {
 }
 
 async function loadContactWindow() {
-  const target = markdownTargets.get('contact');
+  const target = htmlTargets.get('contact');
   if (!target || contactEntry) {
     return;
   }
@@ -876,11 +1065,11 @@ async function loadContactWindow() {
   }
 
   try {
-    const { metadata, body, summary } = await loadMarkdownFile('assets/desktop/contact.md');
+    const { markup, dataset } = await loadHTMLDocument(CONTACT_SOURCE);
     contactEntry = {
-      bodyHTML: body?.trim().length ? markdownToHTML(body) : '<p>Contact details are coming soon.</p>',
-      metadata,
-      summary: metadata.summary?.trim() || summary.trim(),
+      bodyHTML: markup?.trim().length ? markup : '<p>Contact details are coming soon.</p>',
+      metadata: dataset,
+      summary: dataset.summary?.trim() || '',
     };
 
     target.innerHTML = contactEntry.bodyHTML;
@@ -896,7 +1085,7 @@ async function loadContactWindow() {
     }
 
     if (contactEmailLink) {
-      const email = metadata.email?.trim();
+      const email = dataset.email?.trim();
       if (email) {
         contactEmailLink.href = `mailto:${email}`;
         contactEmailLink.hidden = false;
@@ -906,7 +1095,7 @@ async function loadContactWindow() {
     }
 
     if (contactLinkedInLink) {
-      const profile = metadata.linkedin?.trim();
+      const profile = dataset.linkedin?.trim();
       if (profile) {
         contactLinkedInLink.href = profile;
         contactLinkedInLink.hidden = false;
@@ -960,26 +1149,23 @@ async function updateBlog(fileName) {
     button.classList.toggle('is-active', button.dataset.blogEntry === fileName);
   });
 
-  blogTitle.textContent = fileName;
+  const activeBlogButton = blogButtons.find((button) => button.dataset.blogEntry === fileName);
+  blogTitle.textContent = activeBlogButton?.textContent.trim() || fileName;
   blogSummary.textContent = 'Loading entry…';
   blogTags.innerHTML = '';
   blogBody.innerHTML = '<p>Loading file…</p>';
 
   try {
     const path = `assets/blog/${encodeURIComponent(fileName)}`;
-    const { metadata, body, summary } = await loadMarkdownFile(path);
+    const { markup, dataset } = await loadHTMLDocument(path);
     if (blogRequestToken !== requestId) {
       return;
     }
 
-    const normalizedTags = Array.isArray(metadata.tags)
-      ? metadata.tags
-      : typeof metadata.tags === 'string' && metadata.tags.trim().length
-      ? [metadata.tags.trim()]
-      : [];
+    const normalizedTags = parseTagList(dataset.tags);
 
-    blogTitle.textContent = metadata.title?.trim() || fileName;
-    blogSummary.textContent = metadata.summary?.trim() || summary.trim() || 'This post is still being written.';
+    blogTitle.textContent = dataset.title?.trim() || fileName;
+    blogSummary.textContent = dataset.summary?.trim() || 'This post is still being written.';
     blogTags.innerHTML = '';
 
     if (normalizedTags.length) {
@@ -990,14 +1176,15 @@ async function updateBlog(fileName) {
       });
     }
 
-    blogBody.innerHTML = body?.trim().length ? markdownToHTML(body) : '<p>This post is still being written.</p>';
+    blogBody.innerHTML = markup?.trim().length ? markup : '<p>This post is still being written.</p>';
   } catch (error) {
     if (blogRequestToken !== requestId) {
       return;
     }
 
     console.error(error);
-    blogTitle.textContent = fileName;
+    const fallbackButton = blogButtons.find((button) => button.dataset.blogEntry === fileName);
+    blogTitle.textContent = fallbackButton?.textContent.trim() || fileName;
     blogSummary.textContent = 'Unable to load this blog entry. Please try again later.';
     blogTags.innerHTML = '';
     blogBody.innerHTML = '<p>Retro OS could not read this file. Please try again later.</p>';
@@ -1040,8 +1227,8 @@ function loadWindowContent(name) {
     return;
   }
 
-  if (markdownSources.has(name)) {
-    ensureMarkdownTargetLoaded(name);
+  if (htmlSources.has(name)) {
+    ensureHTMLTargetLoaded(name);
     return;
   }
 
@@ -1100,9 +1287,12 @@ async function handleLogin(event) {
 
   updateUser(value);
   showScreen('desktop');
+  startButton?.removeAttribute('disabled');
+  renderSearchResults(startSearchInput?.value || '');
   requestAnimationFrame(() => {
     layoutIcons();
     clampWindowsToWorkspace();
+    updateTaskbarOverflow();
   });
   openWelcome(value);
   loginForm.reset();
@@ -1143,6 +1333,14 @@ function initializeModals() {
       if (contactModal && !contactModal.hidden) {
         closeContactModal();
       }
+      if (startPanel && !startPanel.hidden) {
+        closeStartPanel();
+        startButton?.focus();
+      }
+      if (overflowMenu && !overflowMenu.hidden) {
+        closeOverflowMenu();
+        overflowButton?.focus();
+      }
     }
   });
 }
@@ -1167,15 +1365,18 @@ function initializeApp() {
   initializeIcons();
   initializeWindowControls();
   initializeWorkspace();
+  initializeStartMenu();
   initializePortfolio();
   initializeModals();
   updateClock();
   setInterval(updateClock, 60 * 1000);
+  updateTaskbarOverflow();
 }
 
 window.addEventListener('resize', () => {
   layoutIcons();
   clampWindowsToWorkspace();
+  updateTaskbarOverflow();
 });
 
 initializeApp();

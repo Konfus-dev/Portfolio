@@ -414,6 +414,142 @@
   justify-items: start;
 }
 
+.window__document {
+  width: 100%;
+  max-height: 100%;
+  overflow: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(83, 227, 249, 0.2);
+  background: rgba(4, 17, 29, 0.82);
+  box-shadow: inset 0 0 0 1px rgba(83, 227, 249, 0.08);
+  padding: clamp(1rem, 2.5vw, 1.4rem);
+}
+
+.document {
+  display: grid;
+  gap: clamp(0.75rem, 2vw, 1rem);
+  color: var(--text-secondary);
+}
+
+.document__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.document__title {
+  margin: 0;
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  font-size: clamp(0.95rem, 2.3vw, 1.15rem);
+  color: var(--accent-green);
+}
+
+.document__subtitle {
+  margin: 0;
+  font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.document__body {
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.document__body h3 {
+  margin: 0.75rem 0 0.35rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.14em;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+}
+
+.document__body p {
+  margin: 0;
+}
+
+.document__list {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.35rem;
+  list-style: none;
+}
+
+.document__list li {
+  position: relative;
+  padding-left: 1rem;
+}
+
+.document__list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-cyan);
+}
+
+.document--text {
+  background: linear-gradient(180deg, rgba(12, 40, 58, 0.92), rgba(6, 26, 40, 0.88));
+  box-shadow: inset 0 0 0 1px rgba(126, 245, 181, 0.12);
+}
+
+.document--text .document__body {
+  font-family: 'VT323', monospace;
+  font-size: clamp(1rem, 2.6vw, 1.25rem);
+  line-height: 1.6;
+}
+
+.document--text pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.window--text .window__titlebar {
+  background: linear-gradient(90deg, rgba(6, 38, 56, 0.85), rgba(12, 56, 82, 0.75));
+}
+
+.window--exe .window__document {
+  background: radial-gradient(circle at top, rgba(6, 56, 42, 0.85), rgba(2, 20, 14, 0.9));
+  border-color: rgba(126, 245, 181, 0.25);
+  color: #aef5d8;
+  font-family: 'Fira Code', monospace;
+}
+
+.window--exe .document__title {
+  color: #4bfac9;
+}
+
+.window--exe .document__subtitle {
+  color: rgba(175, 245, 216, 0.65);
+}
+
+.window--exe .document__list li::before {
+  color: rgba(175, 245, 216, 0.75);
+}
+
+.window--pdf .window__document {
+  background: linear-gradient(180deg, rgba(255, 245, 236, 0.95), rgba(245, 232, 220, 0.9));
+  color: #302416;
+  border-color: rgba(83, 227, 249, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.window--pdf .document__title {
+  color: #d8613c;
+}
+
+.window--pdf .document__subtitle {
+  color: #8b5a33;
+}
+
+.window--pdf .document__list li::before {
+  color: #d8613c;
+}
+
 .window__markdown {
   width: 100%;
   display: grid;
@@ -666,8 +802,8 @@
 }
 
 .desktop__taskbar {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  position: relative;
+  display: flex;
   align-items: center;
   gap: clamp(0.75rem, 2vw, 1.25rem);
   background: linear-gradient(90deg, rgba(6, 38, 56, 0.88) 0%, rgba(12, 56, 82, 0.95) 100%);
@@ -682,16 +818,63 @@
 }
 
 .taskbar__start {
-  background: linear-gradient(180deg, rgba(83, 227, 249, 0.25) 0%, rgba(83, 227, 249, 0.45) 100%);
-  border: 1px solid rgba(83, 227, 249, 0.5);
-  border-radius: 999px;
-  padding: 0.35rem 1.4rem;
-  color: var(--text-primary);
-  font-family: var(--font-display);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  box-shadow: inset 0 0 10px rgba(83, 227, 249, 0.25);
-  opacity: 0.65;
+  display: grid;
+  place-items: center;
+  width: clamp(2.6rem, 4vw, 3rem);
+  height: clamp(2.6rem, 4vw, 3rem);
+  border-radius: 10px;
+  border: 1px solid rgba(83, 227, 249, 0.45);
+  background: linear-gradient(135deg, rgba(83, 227, 249, 0.28), rgba(126, 245, 181, 0.24));
+  box-shadow: inset 0 0 12px rgba(83, 227, 249, 0.2), 0 4px 12px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.taskbar__start:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.taskbar__start:not(:disabled):hover,
+.taskbar__start:not(:disabled):focus-visible {
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 14px rgba(126, 245, 181, 0.28), 0 6px 18px rgba(0, 0, 0, 0.45);
+  opacity: 1;
+}
+
+.taskbar__start-icon {
+  position: relative;
+  width: clamp(1.35rem, 2.8vw, 1.6rem);
+  height: clamp(1.35rem, 2.8vw, 1.6rem);
+  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(3, 24, 37, 0.85), rgba(7, 52, 74, 0.85));
+  box-shadow: inset 0 0 0 1px rgba(83, 227, 249, 0.35), 0 0 12px rgba(83, 227, 249, 0.25);
+}
+
+.taskbar__start-icon::before,
+.taskbar__start-icon::after {
+  content: '';
+  position: absolute;
+  background: rgba(83, 227, 249, 0.55);
+}
+
+.taskbar__start-icon::before {
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+  opacity: 0.75;
+}
+
+.taskbar__start-icon::after {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  opacity: 0.75;
 }
 
 .taskbar__apps {
@@ -699,6 +882,8 @@
   align-items: center;
   gap: 0.45rem;
   min-height: 2.2rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .taskbar__button {
@@ -713,6 +898,77 @@
   letter-spacing: 0.08em;
   font-size: 0.95em;
   transition: border 0.2s ease, background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+
+.taskbar__overflow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(2.1rem, 3vw, 2.4rem);
+  height: clamp(2.1rem, 3vw, 2.4rem);
+  border-radius: 8px;
+  border: 1px solid rgba(83, 227, 249, 0.3);
+  background: rgba(4, 17, 29, 0.65);
+  color: var(--accent-cyan);
+  font-size: 1.45rem;
+  line-height: 1;
+  transition: border 0.2s ease, background 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+}
+
+.taskbar__overflow:hover,
+.taskbar__overflow:focus-visible {
+  border-color: rgba(126, 245, 181, 0.6);
+  color: var(--accent-green);
+}
+
+.taskbar__overflow-menu {
+  position: absolute;
+  right: clamp(1.1rem, 3vw, 2rem);
+  bottom: calc(100% + clamp(0.5rem, 1vh, 0.8rem));
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  min-width: clamp(10rem, 25vw, 14rem);
+  background: rgba(4, 17, 29, 0.92);
+  border: 1px solid rgba(83, 227, 249, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 14px 24px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(126, 245, 181, 0.18);
+  backdrop-filter: blur(6px);
+  z-index: 80;
+}
+
+.taskbar__overflow-menu[hidden] {
+  display: none;
+}
+
+.taskbar__overflow-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.95em;
+  letter-spacing: 0.08em;
+  transition: border 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.taskbar__overflow-item:hover,
+.taskbar__overflow-item:focus-visible {
+  border-color: rgba(126, 245, 181, 0.6);
+  background: rgba(126, 245, 181, 0.12);
+  color: var(--accent-green);
+}
+
+.taskbar__overflow-item.is-active {
+  border-color: rgba(83, 227, 249, 0.55);
+  background: rgba(83, 227, 249, 0.12);
+  color: var(--accent-cyan);
 }
 
 .taskbar__button:hover,
@@ -742,17 +998,158 @@
 
 .desktop__status {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.desktop__status span {
-  color: var(--text-secondary);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  line-height: 1.2;
 }
 
 .desktop__clock {
   font-family: var(--font-display);
   color: var(--accent-amber);
+  font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+}
+
+.desktop__date {
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  color: var(--text-secondary);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.start-menu {
+  position: absolute;
+  left: clamp(1.2rem, 3vw, 2.4rem);
+  bottom: calc(clamp(58px, 12vh, 96px) + clamp(1.4rem, 3vh, 2rem));
+  z-index: 90;
+}
+
+.start-menu[hidden] {
+  display: none;
+}
+
+.start-menu__panel {
+  width: min(360px, 90vw);
+  background: rgba(4, 17, 29, 0.95);
+  border: 1px solid rgba(83, 227, 249, 0.35);
+  border-radius: 16px;
+  box-shadow: 0 28px 48px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(126, 245, 181, 0.16);
+  backdrop-filter: blur(8px);
+  padding: clamp(1rem, 3vw, 1.4rem);
+  display: grid;
+  gap: 1rem;
+}
+
+.start-menu__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.start-menu__user {
+  font-family: var(--font-display);
+  letter-spacing: 0.18em;
+  color: var(--accent-green);
+}
+
+.start-menu__logout {
+  background: transparent;
+  border: 1px solid rgba(255, 124, 140, 0.5);
+  border-radius: 999px;
+  padding: 0.35rem 1rem;
+  color: #ff9aa8;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: border 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.start-menu__logout:hover,
+.start-menu__logout:focus-visible {
+  border-color: rgba(255, 124, 140, 0.75);
+  color: #ffd7df;
+  background: rgba(255, 124, 140, 0.18);
+}
+
+.start-menu__search {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.start-menu__label {
+  font-size: 0.85em;
+  letter-spacing: 0.16em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.start-menu__input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(83, 227, 249, 0.35);
+  background: rgba(8, 30, 46, 0.8);
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.start-menu__input:focus-visible {
+  outline: 2px solid rgba(126, 245, 181, 0.65);
+  outline-offset: 2px;
+}
+
+.start-menu__results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.start-menu__result {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: rgba(4, 17, 29, 0.7);
+  color: var(--text-secondary);
+  transition: border 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.start-menu__result:hover,
+.start-menu__result:focus-visible {
+  border-color: rgba(126, 245, 181, 0.6);
+  background: rgba(126, 245, 181, 0.14);
+  color: var(--accent-green);
+}
+
+.start-menu__result-glyph {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 6px;
+  background: rgba(83, 227, 249, 0.18);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  color: var(--accent-cyan);
+}
+
+.start-menu__result-label {
+  text-align: left;
+}
+
+.start-menu__empty {
+  margin: 0;
+  padding: 0.75rem 0.5rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
 }
 
 .modal {

@@ -85,7 +85,7 @@
             </div>
 
             <article
-              class="window"
+              class="window window--text"
               data-window="about"
               data-window-taskbar="about-me.txt"
               data-window-icon="TXT"
@@ -99,12 +99,12 @@
                 </div>
               </header>
               <div class="window__content">
-                <div class="window__markdown" data-markdown-target="about" aria-live="polite">Loading about-me.txt…</div>
+                <div class="window__document" data-html-target="about" aria-live="polite">Loading about-me.txt…</div>
               </div>
             </article>
 
             <article
-              class="window"
+              class="window window--exe"
               data-window="contact"
               data-window-taskbar="contact.exe"
               data-window-icon="EXE"
@@ -118,13 +118,13 @@
                 </div>
               </header>
               <div class="window__content">
-                <div class="window__markdown" data-markdown-target="contact" aria-live="polite">Loading contact.exe…</div>
+                <div class="window__document" data-html-target="contact" aria-live="polite">Loading contact.exe…</div>
                 <button class="button-pill button-pill--ghost" type="button" data-contact-launch disabled>Run contact.exe</button>
               </div>
             </article>
 
             <article
-              class="window"
+              class="window window--pdf"
               data-window="resume"
               data-window-taskbar="resume.pdf"
               data-window-icon="PDF"
@@ -138,7 +138,7 @@
                 </div>
               </header>
               <div class="window__content">
-                <div class="window__markdown" data-markdown-target="resume" aria-live="polite">Loading resume.pdf…</div>
+                <div class="window__document" data-html-target="resume" aria-live="polite">Loading resume.pdf…</div>
               </div>
             </article>
 
@@ -159,8 +159,8 @@
               <div class="window__content">
                 <div class="blog" data-blog>
                   <div class="blog__files" role="list" data-blog-list>
-                    <button class="blog__file" type="button" data-blog-entry="cats.md" role="listitem">cats.md</button>
-                    <button class="blog__file" type="button" data-blog-entry="dogs.md" role="listitem">dogs.md</button>
+                    <button class="blog__file" type="button" data-blog-entry="cats.html" role="listitem">cats.log</button>
+                    <button class="blog__file" type="button" data-blog-entry="dogs.html" role="listitem">dogs.log</button>
                   </div>
                   <div class="blog__viewer">
                     <h3 class="blog__title" data-blog-title aria-live="polite">Blog Entry</h3>
@@ -189,9 +189,9 @@
               <div class="window__content">
                 <div class="portfolio" data-portfolio>
                   <div class="portfolio__files" role="list">
-                    <button class="portfolio__file is-active" type="button" data-file="signal-tracker.md" role="listitem">signal-tracker.md</button>
-                    <button class="portfolio__file" type="button" data-file="vector-console.md" role="listitem">vector-console.md</button>
-                    <button class="portfolio__file" type="button" data-file="echoes-lab.md" role="listitem">echoes-lab.md</button>
+                    <button class="portfolio__file is-active" type="button" data-file="signal-tracker.html" role="listitem">signal-tracker.sys</button>
+                    <button class="portfolio__file" type="button" data-file="vector-console.html" role="listitem">vector-console.sys</button>
+                    <button class="portfolio__file" type="button" data-file="echoes-lab.html" role="listitem">echoes-lab.sys</button>
                   </div>
                   <div class="portfolio__details">
                     <h3 class="portfolio__title" data-portfolio-title aria-live="polite">Signal Tracker</h3>
@@ -214,14 +214,41 @@
                 </div>
 
                 <footer class="desktop__taskbar" aria-label="System task bar">
-                  <button class="taskbar__start" type="button" aria-label="Open start menu" disabled>RETRO</button>
+                  <button class="taskbar__start" type="button" aria-label="Open search menu" data-start-button aria-expanded="false" disabled>
+                    <span class="taskbar__start-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Open search</span>
+                  </button>
                   <div class="taskbar__apps" data-taskbar-apps role="list"></div>
+                  <button class="taskbar__overflow" type="button" data-taskbar-overflow aria-haspopup="true" aria-expanded="false" hidden>
+                    …
+                  </button>
+                  <div class="taskbar__overflow-menu" data-taskbar-overflow-menu hidden role="menu"></div>
                   <div class="desktop__status">
-                    <span data-user-label>USER: GUEST</span>
-                    <span>SYSTEM: ONLINE</span>
                     <time class="desktop__clock" data-clock aria-live="polite">00:00</time>
+                    <span class="desktop__date" data-date aria-live="polite">Jan 01</span>
                   </div>
                 </footer>
+
+                <div class="start-menu" data-start-panel hidden role="dialog" aria-modal="false">
+                  <div class="start-menu__panel">
+                    <header class="start-menu__header">
+                      <div class="start-menu__user" data-start-user>GUEST</div>
+                      <button class="start-menu__logout" type="button" data-logout>Log out</button>
+                    </header>
+                    <div class="start-menu__search">
+                      <label class="start-menu__label" for="start-search-input">Search Desktop</label>
+                      <input
+                        id="start-search-input"
+                        class="start-menu__input"
+                        type="search"
+                        placeholder="Type to find files"
+                        autocomplete="off"
+                        data-start-search
+                      >
+                    </div>
+                    <ul class="start-menu__results" data-start-results role="listbox" aria-live="polite"></ul>
+                  </div>
+                </div>
 
                 <div class="modal" data-modal="welcome" role="dialog" aria-modal="true" hidden>
                   <div class="modal__panel" role="document">
