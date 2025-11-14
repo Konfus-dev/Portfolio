@@ -23,6 +23,9 @@ const clockLabel = document.querySelector('[data-clock]');
 const workspace = document.querySelector('[data-workspace]');
 const taskbar = document.querySelector('[data-taskbar-apps]');
 
+const ICON_GRID_WIDTH = 120;
+const ICON_GRID_HEIGHT = 120;
+
 const markdownTargets = new Map(
   Array.from(document.querySelectorAll('[data-markdown-target]')).map((el) => [el.dataset.markdownTarget, el])
 );
@@ -70,6 +73,7 @@ const markdownCache = new Map();
 let activeUser = 'Guest';
 let selectedIcon = null;
 let zIndexCursor = 20;
+let windowSpawnIndex = 0;
 
 function showScreen(name) {
   Object.entries(screens).forEach(([key, element]) => {
@@ -252,11 +256,74 @@ function bringWindowToFront(win) {
   }
 }
 
+function clampWindowToWorkspace(win) {
+  if (!workspace) return;
+  const rect = workspace.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+
+  const width = win.offsetWidth;
+  const height = win.offsetHeight;
+  const maxLeft = Math.max(rect.width - width, 0);
+  const maxTop = Math.max(rect.height - height, 0);
+
+  const currentLeft = Number.parseFloat(win.style.left || '0') || 0;
+  const currentTop = Number.parseFloat(win.style.top || '0') || 0;
+
+  const nextLeft = Math.min(Math.max(currentLeft, 0), maxLeft);
+  const nextTop = Math.min(Math.max(currentTop, 0), maxTop);
+
+  win.style.left = `${nextLeft}px`;
+  win.style.top = `${nextTop}px`;
+}
+
+function clampWindowsToWorkspace() {
+  windows.forEach((win) => {
+    if (!win.hidden) {
+      clampWindowToWorkspace(win);
+    }
+  });
+}
+
+function positionWindowIfNeeded(win) {
+  if (!workspace || win.dataset.positioned === 'true') {
+    return;
+  }
+
+  const rect = workspace.getBoundingClientRect();
+  if (!rect.width || !rect.height) {
+    requestAnimationFrame(() => positionWindowIfNeeded(win));
+    return;
+  }
+
+  const width = win.offsetWidth;
+  const height = win.offsetHeight;
+  const maxLeft = Math.max(rect.width - width, 0);
+  const maxTop = Math.max(rect.height - height, 0);
+  const baseLeft = Math.max((rect.width - width) / 2, 24);
+  const baseTop = Math.max((rect.height - height) / 3, 24);
+  const offset = (windowSpawnIndex % 4) * 28;
+
+  const left = Math.min(baseLeft + offset, maxLeft);
+  const top = Math.min(baseTop + offset, maxTop);
+
+  win.style.left = `${left}px`;
+  win.style.top = `${top}px`;
+  win.dataset.positioned = 'true';
+  windowSpawnIndex += 1;
+}
+
 function openWindow(name) {
   const win = windows.get(name);
   if (!win) return;
   if (win.hidden) {
     win.hidden = false;
+    requestAnimationFrame(() => {
+      positionWindowIfNeeded(win);
+      clampWindowToWorkspace(win);
+    });
+  } else {
+    positionWindowIfNeeded(win);
+    clampWindowToWorkspace(win);
   }
   ensureTaskbarItem(name);
   bringWindowToFront(win);
@@ -279,6 +346,10 @@ function toggleWindowFromTaskbar(name) {
   if (win.hidden) {
     win.hidden = false;
     ensureTaskbarItem(name);
+    requestAnimationFrame(() => {
+      positionWindowIfNeeded(win);
+      clampWindowToWorkspace(win);
+    });
     bringWindowToFront(win);
     loadWindowContent(name);
   } else if (win.classList.contains('is-active')) {
@@ -286,6 +357,8 @@ function toggleWindowFromTaskbar(name) {
     win.classList.remove('is-active');
     deactivateTaskbarItem(name);
   } else {
+    positionWindowIfNeeded(win);
+    clampWindowToWorkspace(win);
     bringWindowToFront(win);
   }
 }
@@ -303,6 +376,93 @@ function clearIconSelection() {
     selectedIcon.classList.remove('is-selected');
     selectedIcon = null;
   }
+}
+
+function clampIconGridPosition(icon, col, row) {
+  if (!workspace) {
+    return { col, row };
+  }
+
+  const rect = workspace.getBoundingClientRect();
+  const iconWidth = icon.offsetWidth || 0;
+  const iconHeight = icon.offsetHeight || 0;
+
+  const maxCol = rect.width ? Math.max(Math.floor((rect.width - iconWidth) / ICON_GRID_WIDTH), 0) : 0;
+  const maxRow = rect.height ? Math.max(Math.floor((rect.height - iconHeight) / ICON_GRID_HEIGHT), 0) : 0;
+
+  return {
+    col: Math.min(Math.max(col, 0), maxCol),
+    row: Math.min(Math.max(row, 0), maxRow),
+  };
+}
+
+function applyIconPosition(icon, col, row) {
+  const { col: nextCol, row: nextRow } = clampIconGridPosition(icon, col, row);
+  icon.dataset.gridX = String(nextCol);
+  icon.dataset.gridY = String(nextRow);
+  icon.style.left = `${nextCol * ICON_GRID_WIDTH}px`;
+  icon.style.top = `${nextRow * ICON_GRID_HEIGHT}px`;
+}
+
+function layoutIcons() {
+  if (!workspace) return;
+  const rect = workspace.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+
+  icons.forEach((icon) => {
+    const col = Number.parseInt(icon.dataset.gridX ?? '0', 10) || 0;
+    const row = Number.parseInt(icon.dataset.gridY ?? '0', 10) || 0;
+    applyIconPosition(icon, col, row);
+  });
+}
+
+function initializeIconDragging(icon) {
+  let pointerId = null;
+  let offsetX = 0;
+  let offsetY = 0;
+
+  icon.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0) return;
+    pointerId = event.pointerId;
+    icon.setPointerCapture(pointerId);
+    icon.classList.add('is-dragging');
+    const rect = icon.getBoundingClientRect();
+    offsetX = event.clientX - rect.left;
+    offsetY = event.clientY - rect.top;
+  });
+
+  icon.addEventListener('pointermove', (event) => {
+    if (pointerId === null || event.pointerId !== pointerId || !workspace) return;
+    const rect = workspace.getBoundingClientRect();
+    const iconWidth = icon.offsetWidth;
+    const iconHeight = icon.offsetHeight;
+    let left = event.clientX - rect.left - offsetX;
+    let top = event.clientY - rect.top - offsetY;
+
+    const maxLeft = Math.max(rect.width - iconWidth, 0);
+    const maxTop = Math.max(rect.height - iconHeight, 0);
+
+    left = Math.min(Math.max(left, 0), maxLeft);
+    top = Math.min(Math.max(top, 0), maxTop);
+
+    const col = Math.round(left / ICON_GRID_WIDTH);
+    const row = Math.round(top / ICON_GRID_HEIGHT);
+    applyIconPosition(icon, col, row);
+  });
+
+  const endDrag = (event) => {
+    if (pointerId === null || event.pointerId !== pointerId) return;
+    icon.releasePointerCapture(pointerId);
+    pointerId = null;
+    icon.classList.remove('is-dragging');
+
+    const col = Number.parseInt(icon.dataset.gridX ?? '0', 10) || 0;
+    const row = Number.parseInt(icon.dataset.gridY ?? '0', 10) || 0;
+    applyIconPosition(icon, col, row);
+  };
+
+  icon.addEventListener('pointerup', endDrag);
+  icon.addEventListener('pointercancel', endDrag);
 }
 
 function initializeIcons() {
@@ -325,7 +485,11 @@ function initializeIcons() {
         openWindow(icon.dataset.open);
       }
     });
+
+    initializeIconDragging(icon);
   });
+
+  layoutIcons();
 }
 
 function initializeWindowControls() {
@@ -936,6 +1100,10 @@ async function handleLogin(event) {
 
   updateUser(value);
   showScreen('desktop');
+  requestAnimationFrame(() => {
+    layoutIcons();
+    clampWindowsToWorkspace();
+  });
   openWelcome(value);
   loginForm.reset();
 }
@@ -1004,5 +1172,10 @@ function initializeApp() {
   updateClock();
   setInterval(updateClock, 60 * 1000);
 }
+
+window.addEventListener('resize', () => {
+  layoutIcons();
+  clampWindowsToWorkspace();
+});
 
 initializeApp();

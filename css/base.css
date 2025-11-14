@@ -38,10 +38,7 @@ body {
   background: var(--body-bg);
   color: var(--text-primary);
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(1.5rem, 4vw, 3rem);
+  display: block;
   position: relative;
   overflow-x: hidden;
 }
