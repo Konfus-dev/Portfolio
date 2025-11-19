@@ -1,44 +1,35 @@
 :root {
   color-scheme: dark;
-  --body-bg: radial-gradient(circle at 20% 20%, #1d2733 0%, #0b1019 55%, #04070d 100%);
-  --body-grid: rgba(120, 216, 255, 0.08);
-  --monitor-shell: #d9d5c7;
-  --monitor-shell-dark: #b8b2a3;
-  --monitor-shell-light: #f1ece1;
-  --monitor-screen: #04111d;
-  --monitor-glow: #0d425d;
-  --monitor-glass: rgba(18, 82, 112, 0.55);
-  --accent-green: #7ef5b5;
-  --accent-cyan: #53e3f9;
-  --accent-blue: #246d9a;
-  --accent-amber: #ffc778;
-  --text-primary: #e7f6ff;
-  --text-secondary: #97d0e5;
-  --text-muted: rgba(151, 208, 229, 0.6);
-  --shadow-strong: rgba(5, 16, 28, 0.65);
-  --shadow-soft: rgba(8, 24, 40, 0.45);
-  --font-display: 'Press Start 2P', system-ui, sans-serif;
-  --font-body: 'VT323', 'Share Tech Mono', monospace;
-  --focus-outline: 0 0 0 2px var(--accent-cyan), 0 0 0 5px rgba(83, 227, 249, 0.35);
+  --page-bg: radial-gradient(circle at 10% 10%, #031625 0%, #01060c 55%, #000204 100%);
+  --page-sheen: rgba(88, 235, 203, 0.15);
+  --page-text: #e8fbff;
+  --page-muted: rgba(181, 227, 236, 0.76);
+  --panel-bg: rgba(6, 22, 33, 0.82);
+  --panel-border: rgba(94, 255, 197, 0.25);
+  --accent: #6fffd9;
+  --accent-strong: #4bd4ff;
+  --glow: 0 15px 45px rgba(79, 225, 255, 0.35);
+  --font-body: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Space Mono', 'Share Tech Mono', 'IBM Plex Mono', monospace;
 }
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-html,
-body {
-  min-height: 100%;
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-body);
-  background: var(--body-bg);
-  color: var(--text-primary);
   min-height: 100vh;
-  display: block;
+  background: var(--page-bg);
+  color: var(--page-text);
+  font-family: var(--font-body);
+  line-height: 1.6;
   position: relative;
   overflow-x: hidden;
 }
@@ -47,42 +38,44 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: linear-gradient(90deg, transparent 0 22px, var(--body-grid) 22px 23px),
-    linear-gradient(0deg, transparent 0 22px, var(--body-grid) 22px 23px);
-  background-size: 23px 23px;
-  opacity: 0.18;
+  background: radial-gradient(circle at 10% 10%, var(--page-sheen), transparent 65%);
   pointer-events: none;
-  z-index: 0;
+  z-index: -2;
 }
 
-[hidden] {
-  display: none !important;
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mix-blend-mode: screen;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: -2;
 }
 
-button,
-input,
-textarea {
-  font: inherit;
-  color: inherit;
-}
-
-button {
-  cursor: pointer;
+img {
+  max-width: 100%;
+  display: block;
 }
 
 a {
-  color: var(--accent-cyan);
+  color: inherit;
+  text-decoration: none;
 }
 
-a:hover {
-  color: var(--accent-green);
+ul {
+  list-style: none;
 }
 
-a:focus-visible,
-button:focus-visible,
-input:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-outline);
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .visually-hidden {
@@ -93,6 +86,76 @@ input:focus-visible {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
   border: 0;
 }
+
+.container {
+  width: min(1200px, 100% - 2rem);
+  margin: 0 auto;
+}
+
+p {
+  color: var(--page-muted);
+  font-size: 1.05rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.3rem, 3vw, 1.85rem);
+}
+
+.eyebrow {
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+section {
+  padding: clamp(4rem, 12vw, 6.5rem) 0;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.95rem 1.8rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent);
+  color: var(--page-text);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(135deg, rgba(14, 34, 44, 0.65), rgba(12, 57, 61, 0.9));
+}
+
+.button:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.button--ghost {
+  background: transparent;
+  border-color: var(--page-muted);
+  color: var(--page-muted);
+}
+
