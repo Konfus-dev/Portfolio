@@ -316,22 +316,24 @@ section {
   padding: 2rem;
   border-radius: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  background: linear-gradient(180deg, rgba(4, 12, 18, 0.95) 0%, rgba(4, 12, 18, 0.6) 100%);
+  background: linear-gradient(180deg, rgba(4, 12, 18, 0.78) 0%, rgba(4, 12, 18, 0.38) 100%);
   transition: transform 0.35s ease, border-color 0.6s ease, background 0.6s ease, color 0.6s ease;
   position: relative;
   overflow: hidden;
   color: var(--project-text, var(--page-text));
   isolation: isolate;
   box-shadow: 0 25px 55px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .project-card::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(5, 15, 22, 0.95) 0%, rgba(5, 15, 22, 0.5) 55%, rgba(5, 15, 22, 0.1) 100%),
+  background: linear-gradient(180deg, rgba(5, 15, 22, 0.78) 0%, rgba(5, 15, 22, 0.35) 55%, rgba(5, 15, 22, 0.06) 100%),
     var(--project-bg, rgba(255, 255, 255, 0.02));
-  opacity: 0.95;
+  opacity: 0.85;
   z-index: 0;
   transition: opacity 0.6s ease, background 0.6s ease;
 }
