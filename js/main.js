@@ -36,6 +36,24 @@ const defaultTheme = {
   bgImage: computed.getPropertyValue('--page-bg-image').trim(),
 };
 
+const defaultCursor = { x: 10, y: 10 };
+
+function setCursorGlowPosition(xPercent, yPercent) {
+  if (!root) return;
+  root.style.setProperty('--cursor-x', `${xPercent}%`);
+  root.style.setProperty('--cursor-y', `${yPercent}%`);
+}
+
+function handlePointerMove(event) {
+  const x = Math.max(0, Math.min(100, (event.clientX / window.innerWidth) * 100));
+  const y = Math.max(0, Math.min(100, (event.clientY / window.innerHeight) * 100));
+  setCursorGlowPosition(x, y);
+}
+
+window.addEventListener('pointermove', handlePointerMove);
+window.addEventListener('pointerleave', () => setCursorGlowPosition(defaultCursor.x, defaultCursor.y));
+setCursorGlowPosition(defaultCursor.x, defaultCursor.y);
+
 const projectCards = document.querySelectorAll('.project-card[data-project-theme]');
 
 function resolveAssetUrl(assetPath) {
