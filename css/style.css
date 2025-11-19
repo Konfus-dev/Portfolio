@@ -412,19 +412,51 @@ section {
 }
 
 .project-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 60;
+  display: none;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 1.25rem;
   background: rgba(3, 12, 20, 0.95);
   color: var(--page-text);
   padding: 2rem;
   width: min(540px, 90vw);
+  max-height: min(80vh, 640px);
+  overflow-y: auto;
   box-shadow: 0 35px 75px rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(14px);
+}
+
+.project-dialog[open] {
+  display: block;
 }
 
 .project-dialog::backdrop {
   background: rgba(2, 6, 10, 0.65);
   backdrop-filter: blur(5px);
+}
+
+.project-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 10, 0.65);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 40;
+}
+
+.project-dialog-backdrop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.dialog-open {
+  overflow: hidden;
 }
 
 .project-dialog__header {

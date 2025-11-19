@@ -3,6 +3,11 @@ const siteNav = document.getElementById('site-nav');
 const header = document.querySelector('[data-site-header]');
 const yearLabel = document.getElementById('year');
 const root = document.documentElement;
+const body = document.body;
+const isNativeDialogSupported =
+  typeof window !== 'undefined' &&
+  'HTMLDialogElement' in window &&
+  typeof window.HTMLDialogElement?.prototype?.showModal === 'function';
 
 if (yearLabel) {
   yearLabel.textContent = new Date().getFullYear();
@@ -24,24 +29,51 @@ if (navToggle && siteNav) {
 
 const computed = getComputedStyle(root);
 const defaultTheme = {
-  bg: computed.getPropertyValue('--page-bg'),
-  accent: computed.getPropertyValue('--accent'),
-  text: computed.getPropertyValue('--page-text'),
-  sheen: computed.getPropertyValue('--page-sheen'),
-  bgImage: computed.getPropertyValue('--page-bg-image'),
+  bg: computed.getPropertyValue('--page-bg').trim(),
+  accent: computed.getPropertyValue('--accent').trim(),
+  text: computed.getPropertyValue('--page-text').trim(),
+  sheen: computed.getPropertyValue('--page-sheen').trim(),
+  bgImage: computed.getPropertyValue('--page-bg-image').trim(),
 };
 
 const projectCards = document.querySelectorAll('.project-card[data-project-theme]');
 
+function resolveAssetUrl(assetPath) {
+  if (!assetPath) return null;
+  try {
+    return new URL(assetPath, document.baseURI).href;
+  } catch (error) {
+    return assetPath;
+  }
+}
+
+function formatBackgroundImage(value) {
+  if (!value) {
+    return defaultTheme.bgImage || 'none';
+  }
+  const trimmed = value.trim();
+  if (trimmed === 'none' || trimmed.startsWith('url(')) {
+    return trimmed;
+  }
+  return `url(${resolveAssetUrl(trimmed)})`;
+}
+
 function setTheme({ bg, accent, text, sheen, bgImage }) {
-  root.style.setProperty('--page-bg', bg || defaultTheme.bg);
-  root.style.setProperty('--accent', accent || defaultTheme.accent);
-  root.style.setProperty('--page-text', text || defaultTheme.text);
-  root.style.setProperty('--page-sheen', sheen || defaultTheme.sheen);
-  root.style.setProperty('--accent-strong', accent || defaultTheme.accent);
-  root.style.setProperty('--page-bg-image', bgImage || defaultTheme.bgImage || 'none');
+  const resolvedBg = bg || defaultTheme.bg;
+  const resolvedAccent = accent || defaultTheme.accent;
+  const resolvedText = text || defaultTheme.text;
+  const resolvedSheen = sheen || defaultTheme.sheen;
+  const resolvedBgImage = formatBackgroundImage(bgImage);
+
+  root.style.setProperty('--page-bg', resolvedBg);
+  root.style.setProperty('--accent', resolvedAccent);
+  root.style.setProperty('--page-text', resolvedText);
+  root.style.setProperty('--page-sheen', resolvedSheen);
+  root.style.setProperty('--accent-strong', resolvedAccent);
+  root.style.setProperty('--page-bg-image', resolvedBgImage);
+
   if (header) {
-    header.style.borderColor = `${accent || defaultTheme.accent}33`;
+    header.style.borderColor = `${resolvedAccent}33`;
   }
 }
 
@@ -73,7 +105,7 @@ function activateCard(card) {
     accent: projectAccent,
     text: projectText,
     sheen: projectSheen,
-    bgImage: projectGif ? `url(${projectGif})` : undefined,
+    bgImage: projectGif,
   });
 }
 
@@ -93,22 +125,61 @@ projectCards.forEach((card) => {
   card.addEventListener('blur', () => deactivateCard(card));
 });
 
+const dialogBackdrop = (() => {
+  if (isNativeDialogSupported) return null;
+  if (!body || !document.querySelector('.project-dialog')) return null;
+  const backdrop = document.createElement('div');
+  backdrop.className = 'project-dialog-backdrop';
+  backdrop.setAttribute('aria-hidden', 'true');
+  body.appendChild(backdrop);
+  return backdrop;
+})();
+
+let openDialogEl = null;
+
+function syncDialogState() {
+  const hasOpenDialog = Boolean(document.querySelector('.project-dialog[open]'));
+  if (hasOpenDialog) {
+    body?.classList.add('dialog-open');
+    dialogBackdrop?.classList.add('is-visible');
+  } else {
+    body?.classList.remove('dialog-open');
+    dialogBackdrop?.classList.remove('is-visible');
+  }
+}
+
 function openDialog(dialog) {
-  if (!dialog) return;
+  if (!dialog || dialog.hasAttribute('open')) {
+    openDialogEl = dialog;
+    syncDialogState();
+    return;
+  }
   if (typeof dialog.showModal === 'function') {
     dialog.showModal();
   } else {
     dialog.setAttribute('open', '');
   }
+  openDialogEl = dialog;
+  syncDialogState();
 }
 
 function closeDialog(dialog) {
-  if (!dialog) return;
-  if (typeof dialog.close === 'function') {
+  if (!dialog || !dialog.hasAttribute('open')) {
+    if (openDialogEl === dialog) {
+      openDialogEl = null;
+      syncDialogState();
+    }
+    return;
+  }
+  if (typeof dialog.close === 'function' && dialog.open) {
     dialog.close();
   } else {
     dialog.removeAttribute('open');
   }
+  if (openDialogEl === dialog) {
+    openDialogEl = null;
+  }
+  syncDialogState();
 }
 
 const dialogButtons = document.querySelectorAll('[data-dialog-target]');
@@ -134,6 +205,13 @@ projectDialogs.forEach((dialog) => {
       closeDialog(dialog);
     }
   });
+
+  dialog.addEventListener('close', () => {
+    if (openDialogEl === dialog) {
+      openDialogEl = null;
+    }
+    syncDialogState();
+  });
 });
 
 const dialogCloseButtons = document.querySelectorAll('[data-dialog-close]');
@@ -144,3 +222,11 @@ dialogCloseButtons.forEach((button) => {
     closeDialog(dialog);
   });
 });
+
+if (dialogBackdrop) {
+  dialogBackdrop.addEventListener('click', () => {
+    if (openDialogEl) {
+      closeDialog(openDialogEl);
+    }
+  });
+}
