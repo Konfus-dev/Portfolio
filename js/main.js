@@ -28,16 +28,18 @@ const defaultTheme = {
   accent: computed.getPropertyValue('--accent'),
   text: computed.getPropertyValue('--page-text'),
   sheen: computed.getPropertyValue('--page-sheen'),
+  bgImage: computed.getPropertyValue('--page-bg-image'),
 };
 
 const projectCards = document.querySelectorAll('.project-card[data-project-theme]');
 
-function setTheme({ bg, accent, text, sheen }) {
+function setTheme({ bg, accent, text, sheen, bgImage }) {
   root.style.setProperty('--page-bg', bg || defaultTheme.bg);
   root.style.setProperty('--accent', accent || defaultTheme.accent);
   root.style.setProperty('--page-text', text || defaultTheme.text);
   root.style.setProperty('--page-sheen', sheen || defaultTheme.sheen);
   root.style.setProperty('--accent-strong', accent || defaultTheme.accent);
+  root.style.setProperty('--page-bg-image', bgImage || defaultTheme.bgImage || 'none');
   if (header) {
     header.style.borderColor = `${accent || defaultTheme.accent}33`;
   }
@@ -65,12 +67,13 @@ function activateCard(card) {
     return;
   }
   card.classList.add('is-active');
-  const { projectBg, projectAccent, projectText, projectSheen } = card.dataset;
+  const { projectBg, projectAccent, projectText, projectSheen, projectGif } = card.dataset;
   setTheme({
     bg: projectBg,
     accent: projectAccent,
     text: projectText,
     sheen: projectSheen,
+    bgImage: projectGif ? `url(${projectGif})` : undefined,
   });
 }
 
@@ -88,4 +91,56 @@ projectCards.forEach((card) => {
   card.addEventListener('focus', () => activateCard(card));
   card.addEventListener('mouseleave', () => deactivateCard(card));
   card.addEventListener('blur', () => deactivateCard(card));
+});
+
+function openDialog(dialog) {
+  if (!dialog) return;
+  if (typeof dialog.showModal === 'function') {
+    dialog.showModal();
+  } else {
+    dialog.setAttribute('open', '');
+  }
+}
+
+function closeDialog(dialog) {
+  if (!dialog) return;
+  if (typeof dialog.close === 'function') {
+    dialog.close();
+  } else {
+    dialog.removeAttribute('open');
+  }
+}
+
+const dialogButtons = document.querySelectorAll('[data-dialog-target]');
+
+dialogButtons.forEach((button) => {
+  const target = button.getAttribute('data-dialog-target');
+  const dialog = document.querySelector(`[data-project-dialog="${target}"]`);
+  if (!dialog) return;
+  button.addEventListener('click', () => openDialog(dialog));
+});
+
+const projectDialogs = document.querySelectorAll('.project-dialog');
+
+projectDialogs.forEach((dialog) => {
+  dialog.addEventListener('click', (event) => {
+    const rect = dialog.getBoundingClientRect();
+    const clickOutside =
+      event.clientX < rect.left ||
+      event.clientX > rect.right ||
+      event.clientY < rect.top ||
+      event.clientY > rect.bottom;
+    if (clickOutside) {
+      closeDialog(dialog);
+    }
+  });
+});
+
+const dialogCloseButtons = document.querySelectorAll('[data-dialog-close]');
+
+dialogCloseButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const dialog = button.closest('.project-dialog');
+    closeDialog(dialog);
+  });
 });
