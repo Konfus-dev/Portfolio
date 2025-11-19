@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="css/retro-desktop.css" />
   </head>
   <body>
-    <div class="binary-rain" data-binary-overlay aria-hidden="true"></div>
     <header class="site-header" data-site-header>
       <div class="container header__inner">
         <a class="logo" href="#home">Jeremy Hummel</a>
@@ -104,8 +103,7 @@
           <p class="eyebrow">Selected Projects</p>
           <h2>Each universe deserves its own palette.</h2>
           <p class="projects__intro">
-            Scroll through the work below to see the site skin shift with every project. The nav, backgrounds, and accents morph to match the energy of each
-            release while a binary ripple marks the transition.
+            Hover over each release to recolor the entire interface. The navigation and panels instantly sync to the vibe of the active universe.
           </p>
           <div class="project-grid">
             <article
@@ -115,6 +113,7 @@
               data-project-bg="radial-gradient(circle at 20% 20%, #3c0a0a 0%, #120000 70%)"
               data-project-sheen="#ffb199"
               data-project-text="#ffe5df"
+              tabindex="0"
             >
               <header>
                 <p class="eyebrow">ARPG, Blizzard Entertainment</p>
@@ -138,6 +137,7 @@
               data-project-bg="radial-gradient(circle at 30% 20%, #2f1200 0%, #070200 65%)"
               data-project-sheen="#ffe4c1"
               data-project-text="#fff3e6"
+              tabindex="0"
             >
               <header>
                 <p class="eyebrow">Expansion, Blizzard Entertainment</p>
@@ -161,6 +161,7 @@
               data-project-bg="radial-gradient(circle at 10% 10%, #01222e 0%, #001014 70%)"
               data-project-sheen="#e1fbff"
               data-project-text="#e6fbff"
+              tabindex="0"
             >
               <header>
                 <p class="eyebrow">Open World, Guerrilla Games</p>
@@ -184,6 +185,7 @@
               data-project-bg="radial-gradient(circle at 70% 20%, #031a24 0%, #01080c 70%)"
               data-project-sheen="#aef8da"
               data-project-text="#dffcf3"
+              tabindex="0"
             >
               <header>
                 <p class="eyebrow">Civic Tech</p>
@@ -200,51 +202,7 @@
               </ul>
             </article>
 
-            <article
-              class="project-card"
-              data-project-theme="keyboard"
-              data-project-accent="#6d9dff"
-              data-project-bg="radial-gradient(circle at 30% 30%, #040a30 0%, #020313 70%)"
-              data-project-sheen="#bfd6ff"
-              data-project-text="#f0f4ff"
-            >
-              <header>
-                <p class="eyebrow">Indie Unity Game</p>
-                <h3>Keyboard Defense</h3>
-              </header>
-              <p>
-                A typing-based tower defense prototype where keystrokes summon turrets. Built the wave director, modular UI skinning, and an adaptive tutorial
-                that coaches players to type faster under pressure.
-              </p>
-              <ul>
-                <li>Procedural turret glyphs</li>
-                <li>Adaptive difficulty scripting</li>
-                <li>Streamer overlay integrations</li>
-              </ul>
-            </article>
 
-            <article
-              class="project-card"
-              data-project-theme="felines"
-              data-project-accent="#ffb347"
-              data-project-bg="radial-gradient(circle at 20% 20%, #1a0a00 0%, #050100 75%)"
-              data-project-sheen="#ffd7a3"
-              data-project-text="#ffeede"
-            >
-              <header>
-                <p class="eyebrow">Unity Prototype</p>
-                <h3>Armored Felines</h3>
-              </header>
-              <p>
-                Tank combat with feline pilots inspired by Wii Tanks. Built tactile controls, ricochet-friendly VFX, and a progression UI packed with whisker
-                swagger.
-              </p>
-              <ul>
-                <li>Ballistic trajectory sandbox</li>
-                <li>Stylized armor shader pass</li>
-                <li>Squad management HUD</li>
-              </ul>
-            </article>
           </div>
         </div>
       </section>

@@ -159,38 +159,3 @@ section {
   color: var(--page-muted);
 }
 
-.binary-rain {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  font-family: var(--font-mono);
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
-  color: var(--accent);
-  text-align: center;
-  line-height: 1.5;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 100;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 60%, transparent 85%);
-}
-
-.binary-rain.is-active {
-  opacity: 1;
-  animation: glitchy 0.7s ease both;
-}
-
-@keyframes glitchy {
-  0% {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.05);
-  }
-}
