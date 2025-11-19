@@ -1,180 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jeremy Hummel | Tools Developer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-  <div class="scanline"></div>
-  <header class="hero" id="top">
-    <nav class="nav">
-      <a class="nav__logo" href="#top">JH</a>
-      <button class="nav__toggle" aria-expanded="false" aria-controls="nav-menu">☰</button>
-      <ul class="nav__links" id="nav-menu">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#projects">Highlights</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-    <div class="hero__content">
-      <div class="hero__text">
-        <p class="hero__eyebrow">Tools Developer · Experience Designer</p>
-        <h1 class="hero__title">Jeremy Hummel</h1>
-        <p class="hero__subtitle">I craft intuitive tools that elevate creative teams—software that feels like futuristic magic but works with everyday precision.</p>
-        <div class="hero__actions">
-          <a class="btn btn--primary" href="#contact">Connect</a>
-          <a class="btn btn--ghost" href="#experience">View Experience</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jeremy Hummel | Futurist Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header" data-site-header>
+      <div class="container header__inner">
+        <a class="logo" href="#home">Jeremy Hummel</a>
+        <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle__line" aria-hidden="true"></span>
+          <span class="nav-toggle__line" aria-hidden="true"></span>
+          <span class="nav-toggle__line" aria-hidden="true"></span>
+          <span class="visually-hidden">Toggle navigation</span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <a href="#about">About</a>
+          <a href="#work">Work</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="container hero__inner">
+          <p class="eyebrow">Tools Engineer & UX-focused Developer</p>
+          <h1>Game development tooling that blends modern C#/C++ with human-centered UX.</h1>
+          <p>
+            I'm Jeremy Hummel, a software engineer specializing in game development tools, UI/UX systems, and gameplay-supporting applications. I build intuitive,
+            powerful pipelines that help designers, artists, and engineers ship exceptional experiences across proprietary engines, Unity, and Unreal.
+          </p>
+          <p>
+            Collaboration across disciplines keeps me energized, and I'm always stretching my skill set—whether that's designing visual scripting systems, crafting
+            data APIs, or prototyping new workflows.
+          </p>
+          <div class="hero__actions">
+            <a class="button" href="#projects">View featured projects</a>
+            <a class="button button--ghost" href="#contact">Start a conversation</a>
+          </div>
         </div>
-      </div>
-      <div class="hero__hologram" aria-hidden="true">
-        <div class="hero__grid"></div>
-        <div class="hero__orb"></div>
-      </div>
-    </div>
-  </header>
+      </section>
 
-  <main>
-    <section class="panel" id="about">
-      <div class="panel__header">
-        <h2 class="panel__title">About</h2>
-        <span class="panel__id">// 01</span>
-      </div>
-      <div class="panel__body">
-        <p class="blurb">I'm Jeremy Hummel, a Tools Developer with a passion for creating intuitive and easy to use software that goes above and beyond to not only make creation a breeze but delights users. I thrive on designing workflows that help creatives focus on their craft, while my tools handle the heavy lifting with a neon glow.</p>
-        <p>From game studios to live service entertainment teams, I partner with artists, designers, and engineers to transform wishlists into real, reliable systems. I blend empathetic discovery, rapid prototyping, and production-ready engineering to launch experiences that feel instantly familiar yet distinctly futuristic.</p>
-      </div>
-    </section>
-
-    <section class="panel" id="skills">
-      <div class="panel__header">
-        <h2 class="panel__title">Core Systems &amp; Skills</h2>
-        <span class="panel__id">// 02</span>
-      </div>
-      <div class="panel__body panel__body--grid">
-        <article class="card">
-          <h3 class="card__title">Technical Stack</h3>
-          <ul>
-            <li>C#, WPF &amp; WinForms</li>
-            <li>Python, PyQt, Qt</li>
-            <li>Unreal Engine Tools &amp; Editor Extensibility</li>
-            <li>Web Tech: TypeScript, Node.js, GraphQL</li>
+      <section class="about" id="about">
+        <div class="container about__grid">
+          <div>
+            <p class="eyebrow">Experience</p>
+            <h2>Tools that respect creative flow</h2>
+            <p>
+              I specialize in translating complex problems into approachable tooling—whether that's WPF editors for Diablo IV, Qt launchers for content teams, or
+              backend APIs that keep civic data organized. I move comfortably between UX research, systems design, and low-level engineering so teams can iterate
+              faster with confidence.
+            </p>
+            <p>
+              Outside of development you'll usually find me gaming (Halo CE, The Witcher 3, Pokémon Emerald, and Dispatch are mainstays) or recharging outdoors by
+              skiing, skating, hiking, biking, and traveling.
+            </p>
+          </div>
+          <ul class="stats">
+            <li>
+              <span>3</span>
+              engine ecosystems (Unity, Unreal, proprietary)
+            </li>
+            <li>
+              <span>2</span>
+              live service releases supported end-to-end
+            </li>
+            <li>
+              <span>100k+</span>
+              caffeine-fueled lines of C#/C++/Python shipped
+            </li>
           </ul>
-        </article>
-        <article class="card">
-          <h3 class="card__title">Workflow Mastery</h3>
-          <ul>
-            <li>CI/CD &amp; Live Service Deployment</li>
-            <li>Instrumentation &amp; Analytics Pipelines</li>
-            <li>UX Discovery &amp; Co-Design Sessions</li>
-            <li>Automation &amp; Content Pipelines</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h3 class="card__title">Creative Superpowers</h3>
-          <ul>
-            <li>Experience Prototyping &amp; User Testing</li>
-            <li>Visual Scripting Systems Design</li>
-            <li>Technical Documentation &amp; Training</li>
-            <li>Leading Cross-Disciplinary Initiatives</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel" id="experience">
-      <div class="panel__header">
-        <h2 class="panel__title">Experience Transmission</h2>
-        <span class="panel__id">// 03</span>
-      </div>
-      <div class="panel__body panel__body--timeline">
-        <article class="timeline">
-          <header class="timeline__meta">
-            <h3 class="timeline__title">Disney Entertainment – Tools Engineer</h3>
-            <p class="timeline__date">Sep 2021 – Current</p>
-          </header>
-          <ul class="timeline__list">
-            <li>Implemented a live service game build and deployment pipeline, integrating Jira automation, Confluence reporting, and WPF tooling to reduce release friction.</li>
-            <li>Designed collaborative tools in WPF that combined roadmap visualization with defect triage to align cross-discipline teams.</li>
-            <li>Crafted a cross-team productivity dashboard and visual editor that accelerated UX feedback loops and boosted iteration speed.</li>
-            <li>Led Unreal Engine tooling initiatives that surfaced actionable insights and expanded design experimentation capacity.</li>
-          </ul>
-        </article>
-        <article class="timeline">
-          <header class="timeline__meta">
-            <h3 class="timeline__title">Blizzard Entertainment – Tools &amp; Engine Contractor</h3>
-            <p class="timeline__date">Sep 2020 – Aug 2021</p>
-          </header>
-          <ul class="timeline__list">
-            <li>Delivered Maya and Qt-powered content creation tools that empowered artists and designers to iterate faster on visuals and gameplay.</li>
-            <li>Enhanced automation around asset ingestion, review, and health tracking to safeguard live service quality.</li>
-            <li>Collaborated closely with art and production leaders to evolve cross-team workflows and onboard new creators efficiently.</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel" id="projects">
-      <div class="panel__header">
-        <h2 class="panel__title">Signal Boosts</h2>
-        <span class="panel__id">// 04</span>
-      </div>
-      <div class="panel__body panel__body--grid">
-        <article class="card card--signal">
-          <h3 class="card__title">LiveOps Control Center</h3>
-          <p>Centralized build deployment, monitoring, and alerting into a single operator console, cutting release prep time by 40%.</p>
-          <span class="card__tag">C#, WPF, Jira, Confluence</span>
-        </article>
-        <article class="card card--signal">
-          <h3 class="card__title">Blueprint Visual Scripting Toolkit</h3>
-          <p>Extended Unreal Engine with specialized nodes and diagnostics that empowered designers to prototype features without engineering dependencies.</p>
-          <span class="card__tag">Unreal Engine, C++, UX Research</span>
-        </article>
-        <article class="card card--signal">
-          <h3 class="card__title">Creative Analytics HUD</h3>
-          <p>Built a telemetry overlay that surfaced player feedback and live metrics directly in-editor, enabling data-driven iteration loops.</p>
-          <span class="card__tag">Python, GraphQL, Data Viz</span>
-        </article>
-      </div>
-    </section>
-
-    <section class="panel panel--accent" id="contact">
-      <div class="panel__header">
-        <h2 class="panel__title">Open Channel</h2>
-        <span class="panel__id">// 05</span>
-      </div>
-      <div class="panel__body panel__body--contact">
-        <p>Ready to collaborate on the next generation of creator tools? Reach out and let's design something exceptional.</p>
-        <div class="contact__grid">
-          <a class="contact__link" href="mailto:hello@jeremyhummel.dev">hello@jeremyhummel.dev</a>
-          <a class="contact__link" href="https://github.com/JeremyHummel" target="_blank" rel="noopener">github.com/JeremyHummel</a>
-          <a class="contact__link" href="https://www.linkedin.com/in/jeremyhummel" target="_blank" rel="noopener">linkedin.com/in/jeremyhummel</a>
         </div>
+      </section>
+
+      <section class="work" id="work">
+        <div class="container work__inner">
+          <p class="eyebrow">Recent focus</p>
+          <h2>Where a UX-minded engineer adds the most lift</h2>
+          <div class="work__grid">
+            <article>
+              <h3>Game & level tools</h3>
+              <p>Designing, documenting, and maintaining WPF/Qt interfaces, automation, and APIs for Diablo IV and proprietary pipelines.</p>
+            </article>
+            <article>
+              <h3>Data & backend systems</h3>
+              <p>Architecting services that manage tree-like data, Azure/Kotlin APIs, and automation scripts that keep releases on track.</p>
+            </article>
+            <article>
+              <h3>Cross-discipline collaboration</h3>
+              <p>Partnering with designers, artists, and technical artists to scope tooling, document workflows, and amplify productivity.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="projects" id="projects" aria-label="Featured projects">
+        <div class="container">
+          <p class="eyebrow">Selected Projects</p>
+          <h2>Each universe deserves its own palette.</h2>
+          <p class="projects__intro">
+            Hover over each release to recolor the interface. Every project reflects a different stack, problem space, and team—yet they all share the same
+            obsession with making complex workflows feel intuitive.
+          </p>
+          <div class="project-grid">
+            <article
+              class="project-card"
+              data-project-theme="diablo4"
+              data-project-accent="#ff6040"
+              data-project-bg="radial-gradient(circle at 20% 20%, #3c0a0a 0%, #120000 70%)"
+              data-project-sheen="#ffb199"
+              data-project-text="#ffe5df"
+              data-project-gif="assets/gifs/Diablo4.gif"
+              tabindex="0">
+              <header>
+                <p class="eyebrow">ARPG, Blizzard Entertainment</p>
+                <h3>Diablo IV</h3>
+              </header>
+              <p>
+                Tools engineer for Diablo's proprietary engine, crafting intuitive WPF editors, automation, and telemetry that keep Diablo IV and its
+                live seasons shipping smoothly.
+              </p>
+              <ul>
+                <li>Death creation pipeline that dropped builds from 2 weeks to less than a day</li>
+                <li>Streamlined Diablo editor UI/UX so designers could prototype faster</li>
+                <li>Automation and telemetry tooling to track tool usage and make informed, data driven decisions</li>
+              </ul>
+              <div class="project-card__actions">
+                <button class="project-card__more" type="button" data-dialog-target="diablo4">More details</button>
+              </div>
+              <dialog class="project-dialog" data-project-dialog="diablo4" aria-labelledby="dialog-title-diablo4">
+                <div class="project-dialog__header">
+                  <h3 class="project-dialog__title" id="dialog-title-diablo4">Diablo IV//Tooling</h3>
+                  <button class="project-dialog__close" type="button" data-dialog-close>&times;</button>
+                </div>
+                <div class="project-dialog__body">
+                  <p>Designed, documented, and maintained UX-rich editors that increased productivity for designers and level artists.</p>
+                  <p>Implemented automation and debugging workflows in C# and C++ to streamline encounter tuning and data reviews.</p>
+                  <p>Served as the Level Art/Level Design point of contact to scope tooling needs and promote workflow health.</p>
+                </div>
+              </dialog>
+            </article>
+
+            <article
+              class="project-card"
+              data-project-theme="vessel"
+              data-project-accent="#fb9b2f"
+              data-project-bg="radial-gradient(circle at 30% 20%, #2f1200 0%, #070200 65%)"
+              data-project-sheen="#ffe4c1"
+              data-project-text="#fff3e6"
+              data-project-gif="assets/gifs/VesselOfHatred.gif"
+              tabindex="0">
+              <header>
+                <p class="eyebrow">Expansion, Blizzard Entertainment</p>
+                <h3>Diablo IV: Vessel of Hatred</h3>
+              </header>
+              <p>
+                Extending Diablo IV's tooling for the expansion with possession-driven control layers, jungle-warped HUD frames, and raid-ready designer workflows
+                that work seamlessly across PC, console, and companion surfaces.
+              </p>
+              <ul>
+                <li>Visual scripting system UI and mid-level API for designers</li>
+                <li>Data inheritance tooling designed and implemented with TDD</li>
+              </ul>
+              <div class="project-card__actions">
+                <button class="project-card__more" type="button" data-dialog-target="vessel">More details</button>
+              </div>
+              <dialog class="project-dialog" data-project-dialog="vessel" aria-labelledby="dialog-title-vessel">
+                <div class="project-dialog__header">
+                  <h3 class="project-dialog__title" id="dialog-title-vessel">Vessel of Hatred // Expansion</h3>
+                  <button class="project-dialog__close" type="button" data-dialog-close>&times;</button>
+                </div>
+                <div class="project-dialog__body">
+                  <p>Visual scripting system UI and mid-level API for designers</p>
+                  <p>Data inheritance tooling designed and implemented with TDD</p>
+                </div>
+              </dialog>
+            </article>
+
+            <article
+              class="project-card"
+              data-project-theme="steamroller"
+              data-project-accent="#fbd38c"
+              data-project-bg="radial-gradient(circle at 40% 20%, #2a1200 0%, #050200 70%)"
+              data-project-sheen="#ffe4c7"
+              data-project-text="#fff5ea"
+              data-project-gif="assets/gifs/ForbiddenWest.gif"
+              tabindex="0"
+            >
+              <header>
+                <p class="eyebrow">Animation Tools, Steamroller Studios</p>
+                <h3>Maya Automation Suite</h3>
+              </header>
+              <p>
+                Contracted with Steamroller Studios to collaborate with technical artists, animators, and riggers on automation and tooling that sped up Maya-based
+                productions using Python, Qt, and Git.
+              </p>
+              <ul>
+                <li>Maya quick-save workflow so animators can experiment freely</li>
+                <li>Multi-project launcher with per-project tooling configs</li>
+                <li>Automation for animation project management and source control</li>
+              </ul>
+              <div class="project-card__actions">
+                <button class="project-card__more" type="button" data-dialog-target="steamroller">More details</button>
+              </div>
+              <dialog class="project-dialog" data-project-dialog="steamroller" aria-labelledby="dialog-title-steamroller">
+                <div class="project-dialog__header">
+                  <h3 class="project-dialog__title" id="dialog-title-steamroller">Steamroller Studios // Pipeline</h3>
+                  <button class="project-dialog__close" type="button" data-dialog-close>&times;</button>
+                </div>
+                <div class="project-dialog__body">
+                  <p>Collaborated with technical artists, animators, riggers, and production to gather requirements and iterate quickly.</p>
+                  <p>Delivered Python + Qt tooling that automated source control, project setup, and high-volume save operations.</p>
+                  <p>Documented workflows so artists could customize tooling while staying aligned with studio-wide best practices.</p>
+                </div>
+              </dialog>
+            </article>
+
+            <article
+              class="project-card"
+              data-project-theme="usafacts"
+              data-project-accent="#57ffbd"
+              data-project-bg="radial-gradient(circle at 70% 20%, #031a24 0%, #01080c 70%)"
+              data-project-sheen="#aef8da"
+              data-project-text="#dffcf3"
+              data-project-gif="assets/gifs/USAFacts.gif"
+              tabindex="0"
+            >
+              <header>
+                <p class="eyebrow">Civic Tech</p>
+                <h3>USAFacts</h3>
+              </header>
+              <p>
+                Backend developer contract focused on building reliable Azure/Kotlin services, APIs for managing tree-like data, and automation scripts that kept
+                the USAFacts data ecosystem consistent.
+              </p>
+              <ul>
+                <li>Central backend API for reading/writing hierarchical data</li>
+                <li>Azure + CosmosDB services stitched together with Kotlin/PostgreSQL</li>
+                <li>Python automations for data migrations and model transitions</li>
+              </ul>
+              <div class="project-card__actions">
+                <button class="project-card__more" type="button" data-dialog-target="usafacts">More details</button>
+              </div>
+              <dialog class="project-dialog" data-project-dialog="usafacts" aria-labelledby="dialog-title-usafacts">
+                <div class="project-dialog__header">
+                  <h3 class="project-dialog__title" id="dialog-title-usafacts">USAFacts // Civic Data</h3>
+                  <button class="project-dialog__close" type="button" data-dialog-close>&times;</button>
+                </div>
+                <div class="project-dialog__body">
+                  <p>Gathered requirements across analysts, designers, and engineers to understand how they needed to query civic data.</p>
+                  <p>Implemented Azure-backed services, Kotlin endpoints, and PostgreSQL integrations to keep reports consistent.</p>
+                  <p>Wrote Python scripts to automate migrations and accelerate adoption of new database models.</p>
+                </div>
+              </dialog>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact" id="contact">
+        <div class="container contact__inner">
+          <div>
+            <p class="eyebrow">Contact</p>
+            <h2>Ready to collaborate?</h2>
+            <p>
+              I'm open to roles and collaborations focused on tools engineering, UI/UX for games, backend services, and anything that helps creative teams move
+              faster. Let's talk about how I can plug into your pipeline.
+            </p>
+          </div>
+          <div class="contact__actions">
+            <a class="button" href="mailto:jeremy.hummel3@gmail.com">jeremy.hummel3@gmail.com</a>
+            <a class="button button--ghost" href="https://www.linkedin.com/in/jeremy-hummel-203767ba" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="button button--ghost" href="https://github.com/Konfus-dev" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Jeremy Hummel. Tools engineer, UX advocate, gamer, and outdoors enthusiast.</p>
       </div>
-    </section>
-  </main>
+    </footer>
 
-  <footer class="footer">
-    <p>© <span id="year"></span> Jeremy Hummel · Crafted with retro-futurist love.</p>
-    <a class="footer__top" href="#top" aria-label="Back to top">▲</a>
-  </footer>
-
-  <script>
-    const toggle = document.querySelector('.nav__toggle');
-    const menu = document.querySelector('#nav-menu');
-    toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true' || false;
-      toggle.setAttribute('aria-expanded', !expanded);
-      menu.classList.toggle('nav__links--open');
-    });
-
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
-</body>
+    <script src="js/main.js"></script>
+  </body>
 </html>
