@@ -258,16 +258,28 @@ section {
   flex-wrap: wrap;
 }
 
+.about {
+  margin-top: clamp(1.75rem, 5vw, 2.75rem);
+  padding-top: clamp(4.5rem, 9vw, 6rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about__actions {
+  margin-top: 1rem;
+}
+
 .about__grid {
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  padding-top: 2rem;
+  padding-top: 1rem;
+  align-items: start;
 }
 
 .stats {
   display: grid;
-  gap: 1.5rem;
+  gap: 0.9rem;
+  margin-top: 0.35rem;
 }
 
 .stats span {
@@ -334,6 +346,7 @@ section {
   display: flex;
   flex-direction: column;
   padding: 2rem;
+  padding-bottom: 2.75rem;
   border-radius: 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: linear-gradient(180deg, rgba(4, 12, 18, 0.78) 0%, rgba(4, 12, 18, 0.38) 100%);
@@ -382,6 +395,45 @@ section {
 .project-card h3 {
   margin-top: 0.25rem;
   margin-bottom: 1rem;
+}
+
+.project-card__meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.project-card__role {
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: var(--project-text, var(--page-text));
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.project-card__tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.project-card__tag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--project-text, var(--page-text));
 }
 
 .project-card ul {
@@ -526,6 +578,18 @@ body.dialog-open {
 
 .project-dialog__section:last-child {
   border-bottom: none;
+}
+
+.project-dialog__links .tech-pill-list a {
+  color: inherit;
+  border-color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+}
+
+.project-dialog__links .tech-pill-list a:hover,
+.project-dialog__links .tech-pill-list a:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .tech-pill-list {

@@ -47,10 +47,6 @@
             Collaboration across disciplines keeps me energized, and I'm always stretching my skill set—whether that's designing visual scripting systems, crafting
             data APIs, or prototyping new workflows.
           </p>
-          <div class="hero__actions">
-            <a class="button" href="#projects">View featured projects</a>
-            <a class="button button--ghost" href="#contact">Start a conversation</a>
-          </div>
         </div>
       </section>
 
@@ -68,22 +64,26 @@
               Outside of development you'll usually find me gaming (Halo CE, The Witcher 3, Pokémon Emerald, and Dispatch are mainstays) or recharging outdoors by
               skiing, skating, hiking, biking, and traveling.
             </p>
+            <div class="hero__actions about__actions">
+              <a class="button" href="https://www.linkedin.com/in/jeremy-hummel-203767ba/details/experience/" target="_blank" rel="noopener">Download resume</a>
+              <a class="button button--ghost" href="https://github.com/Konfus-dev" target="_blank" rel="noopener">GitHub</a>
+            </div>
           </div>
-          <ul class="stats">
-            <li>
-              <span>5</span>
-              Ecosystems (Unity, Unreal, Maya, Windows, Web)
-            </li>
-            <li>
-              <span>5</span>
-              Shipped Products
-            </li>
-            <li>
-              <span>100k+</span>
-              Caffeine-fueled lines of code shipped
-            </li>
-          </ul>
-        </div>
+            <ul class="stats">
+              <li>
+                <span>5</span>
+                Ecosystems (Unity, Unreal, Maya, Windows, Web)
+              </li>
+              <li>
+                <span>5</span>
+                Shipped Products
+              </li>
+              <li>
+                <span>14x</span>
+                Faster death-pipeline builds (2 weeks ➜ &lt;1 day)
+              </li>
+            </ul>
+          </div>
       </section>
 
       <section class="work" id="skills">
@@ -122,6 +122,7 @@
           <div class="project-grid">
             <article
               class="project-card"
+              aria-label="Diablo IV Base Game tools project"
               data-project-theme="diablo4"
               data-project-accent="#ff6040"
               data-project-bg="radial-gradient(circle at 20% 20%, #3c0a0a 0%, #120000 70%)"
@@ -133,6 +134,14 @@
                 <p class="eyebrow">ARPG, Blizzard Entertainment</p>
                 <h3>Diablo IV: Base Game</h3>
               </header>
+              <div class="project-card__meta" aria-label="Role and core stack">
+                <span class="project-card__role">Role: Tools Engineer</span>
+                <div class="project-card__tags" aria-label="Primary technologies">
+                  <span class="project-card__tag">C#</span>
+                  <span class="project-card__tag">C++</span>
+                  <span class="project-card__tag">WPF</span>
+                </div>
+              </div>
               <p>
                 Designed and developed tooling for Diablo's proprietary engine—shipping UX-forward editors, automation, and telemetry to ensure a smooth launch for D4.
               </p>
@@ -170,12 +179,20 @@
                     <h4>Examples of Contributions</h4>
                     <ul class="project-dialog__list">
                       <li>Death creation pipeline that dropped builds from 2 weeks to less than a day via a Wizard that automates most of a monster deaths setup</li>
-                      <li>Streamlined Diablo editor UI/UX so designers could prototype faster through data driven desisions to target areas of largest impact via telemetry</li>
+                      <li>Streamlined Diablo editor UI/UX so designers could prototype faster through data driven decisions to target areas of largest impact via telemetry</li>
                       <li>Automation and telemetry tooling to track tool usage and make informed, data driven decisions like mentioned above</li>
                       <li>Designed, documented, and maintained UX-rich editors that increased productivity for designers and level artists such as the NPC wizard used to create NPCs and the Death Wizard used to author monster deaths.</li>
-                      <li>Implemented automation and debugging workflows in C# and C++ to streamline encounter tuning and data reviews such as generating Excel reports for encounters and implementing a asset watch system so users can be notified of important changes.</li>
+                      <li>Implemented automation and debugging workflows in C# and C++ to streamline encounter tuning and data reviews such as generating Excel reports for encounters and implementing an asset watch system so users can be notified of important changes.</li>
                       <li>Served as the Level Art/Level Design point of contact to scope tooling needs and promote workflow health by hosting regular syncs with the level art teams and triaging requests.</li>
                     </ul>
+                  </div>
+                  <div class="project-dialog__section project-dialog__links">
+                    <h4>Quick links</h4>
+                    <div class="tech-pill-list">
+                      <a class="tech-pill" href="mailto:jeremy.hummel3@gmail.com?subject=Diablo%20IV%20Tools">Email</a>
+                      <a class="tech-pill" href="https://www.linkedin.com/in/jeremy-hummel-203767ba/details/experience/" target="_blank" rel="noopener">LinkedIn</a>
+                      <a class="tech-pill" href="https://github.com/Konfus-dev" target="_blank" rel="noopener">GitHub</a>
+                    </div>
                   </div>
                 </div>
               </dialog>
@@ -183,6 +200,7 @@
 
             <article
               class="project-card"
+              aria-label="Diablo IV Vessel of Hatred expansion tools project"
               data-project-theme="vessel"
               data-project-accent="#fb9b2f"
               data-project-bg="radial-gradient(circle at 30% 20%, #2f1200 0%, #070200 65%)"
@@ -194,13 +212,21 @@
                 <p class="eyebrow">Expansion, Blizzard Entertainment</p>
                 <h3>Diablo IV: Vessel of Hatred</h3>
               </header>
+              <div class="project-card__meta" aria-label="Role and core stack">
+                <span class="project-card__role">Role: Tools Engineer</span>
+                <div class="project-card__tags" aria-label="Primary technologies">
+                  <span class="project-card__tag">C#</span>
+                  <span class="project-card__tag">C++</span>
+                  <span class="project-card__tag">WPF</span>
+                </div>
+              </div>
               <p>
                 Extended and improved Diablo IV's existing tooling systems so content creators could build the expansion with confidence.
               </p>
               <ul>
                 <li>Implemented a visual scripting system akin to UE blueprints</li>
-                <li>Implmented a data inheritance system to allow designers to work with data more efficiently</li>
-                <li>Implmemented a UI Data binding system to allow more dynamic & data driven UIs in D4</li>
+                <li>Implemented a data inheritance system to allow designers to work with data more efficiently</li>
+                <li>Implemented a UI Data binding system to allow more dynamic &amp; data driven UIs in D4</li>
               </ul>
               <div class="project-card__actions">
                 <button class="project-card__more" type="button" data-dialog-target="vessel">More details</button>
@@ -230,9 +256,17 @@
                     <h4>Examples of Contributions</h4>
                     <ul class="project-dialog__list">
                       <li>Visual scripting system UI and mid-level API for designers made to decouple designers and engineers to improve both areas productivity by making it to where neither has to wait on the other</li>
-                      <li>Data inheritance tooling made to improved content creator productivity with large datasets implemented with TDD (test driven development)</li>
-                      <li>Data binding tooling created to make Diablos in game UIs data driven and to decouple designers and UI engineers, this system was implemented with TDD (test driven development)</li>
+                      <li>Data inheritance tooling made to improve content creator productivity with large datasets implemented with TDD (test driven development)</li>
+                      <li>Data binding tooling created to make Diablo's in game UIs data driven and to decouple designers and UI engineers, this system was implemented with TDD (test driven development)</li>
                     </ul>
+                  </div>
+                  <div class="project-dialog__section project-dialog__links">
+                    <h4>Quick links</h4>
+                    <div class="tech-pill-list">
+                      <a class="tech-pill" href="mailto:jeremy.hummel3@gmail.com?subject=Vessel%20of%20Hatred%20Tools">Email</a>
+                      <a class="tech-pill" href="https://www.linkedin.com/in/jeremy-hummel-203767ba/details/experience/" target="_blank" rel="noopener">LinkedIn</a>
+                      <a class="tech-pill" href="https://github.com/Konfus-dev" target="_blank" rel="noopener">GitHub</a>
+                    </div>
                   </div>
                 </div>
               </dialog>
@@ -240,6 +274,7 @@
 
             <article
               class="project-card"
+              aria-label="Steamroller Studios pipeline tools project"
               data-project-theme="steamroller"
               data-project-accent="#fbd38c"
               data-project-bg="radial-gradient(circle at 40% 20%, #2a1200 0%, #050200 70%)"
@@ -251,6 +286,14 @@
                 <p class="eyebrow">Multi-project, Steamroller Studios</p>
                 <h3>Horizon Forbidden West, Fortnite, and More!</h3>
               </header>
+              <div class="project-card__meta" aria-label="Role and core stack">
+                <span class="project-card__role">Role: Technical Artist / Tools</span>
+                <div class="project-card__tags" aria-label="Primary technologies">
+                  <span class="project-card__tag">Python</span>
+                  <span class="project-card__tag">Qt</span>
+                  <span class="project-card__tag">Maya API</span>
+                </div>
+              </div>
               <p>
                 Shipped an art tools suite fueling cinematics for projects such as <em>Horizon Forbidden West</em> and gameplay animations in <em>Fortnite</em>.
               </p>
@@ -290,12 +333,21 @@
                        <li>Automation for animation project management and source control to allow artists to easily manage source control revisions and manage large animation and rig libraries</li>
                     </ul>
                   </div>
+                  <div class="project-dialog__section project-dialog__links">
+                    <h4>Quick links</h4>
+                    <div class="tech-pill-list">
+                      <a class="tech-pill" href="mailto:jeremy.hummel3@gmail.com?subject=Steamroller%20Studios%20Tools">Email</a>
+                      <a class="tech-pill" href="https://www.linkedin.com/in/jeremy-hummel-203767ba/details/experience/" target="_blank" rel="noopener">LinkedIn</a>
+                      <a class="tech-pill" href="https://github.com/Konfus-dev" target="_blank" rel="noopener">GitHub</a>
+                    </div>
+                  </div>
                 </div>
               </dialog>
             </article>
 
             <article
               class="project-card"
+              aria-label="USAFacts backend services project"
               data-project-theme="usafacts"
               data-project-accent="#57ffbd"
               data-project-bg="radial-gradient(circle at 70% 20%, #031a24 0%, #01080c 70%)"
@@ -307,6 +359,14 @@
                 <p class="eyebrow">Backend Tech, USAFacts</p>
                 <h3>USAFacts.org</h3>
               </header>
+              <div class="project-card__meta" aria-label="Role and core stack">
+                <span class="project-card__role">Role: Backend Engineer</span>
+                <div class="project-card__tags" aria-label="Primary technologies">
+                  <span class="project-card__tag">Kotlin</span>
+                  <span class="project-card__tag">Azure</span>
+                  <span class="project-card__tag">PostgreSQL</span>
+                </div>
+              </div>
               <p>
                 Backend contract focused on Azure/Kotlin services, hierarchical data APIs, and automation scripts that kept the USAFacts civic data ecosystem accurate and auditable.
               </p>
@@ -342,11 +402,19 @@
                   </div>
                   <div class="project-dialog__section">
                     <h4>Examples of Contributions</h4>
-                    <ul class="project-dialog__list"> 
+                    <ul class="project-dialog__list">
                       <li>Central backend API for reading/writing hierarchical data used to efficiently manage large tree like data structures in the cloud</li>
                       <li>Azure + CosmosDB services stitched together with Kotlin/PostgreSQL and utilized via a RESTFul API by the websites frontend</li>
                       <li>Python automations for data migrations and model transitions such as the transition from a MySQL database to CosmosDB</li>
                     </ul>
+                  </div>
+                  <div class="project-dialog__section project-dialog__links">
+                    <h4>Quick links</h4>
+                    <div class="tech-pill-list">
+                      <a class="tech-pill" href="mailto:jeremy.hummel3@gmail.com?subject=USAFacts%20Engineering">Email</a>
+                      <a class="tech-pill" href="https://www.linkedin.com/in/jeremy-hummel-203767ba/details/experience/" target="_blank" rel="noopener">LinkedIn</a>
+                      <a class="tech-pill" href="https://github.com/Konfus-dev" target="_blank" rel="noopener">GitHub</a>
+                    </div>
                   </div>
                 </div>
               </dialog>
@@ -367,8 +435,8 @@
           </div>
           <div class="contact__actions">
             <a class="button" href="mailto:jeremy.hummel3@gmail.com">jeremy.hummel3@gmail.com</a>
+            <a class="button button--ghost" href="mailto:jeremy.hummel3@gmail.com?subject=Book%20a%20call">Book a call</a>
             <a class="button button--ghost" href="https://www.linkedin.com/in/jeremy-hummel-203767ba" target="_blank" rel="noopener">LinkedIn</a>
-            <a class="button button--ghost" href="https://github.com/Konfus-dev" target="_blank" rel="noopener">GitHub</a>
           </div>
         </div>
       </section>
