@@ -466,6 +466,7 @@ section {
 .project-card__more {
   position: relative;
   z-index: 1;
+  margin-top: 2rem;
   padding: 0.65rem 1.2rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.4);
