@@ -1,25 +1,3 @@
-const yearLabel = document.getElementById('year');
-const navToggle = document.querySelector('[data-nav-toggle]');
-const siteNav = document.getElementById('site-nav');
-
-if (yearLabel) {
-  yearLabel.textContent = new Date().getFullYear();
-}
-
-if (navToggle && siteNav) {
-  navToggle.addEventListener('click', () => {
-    const isOpen = siteNav.classList.toggle('is-open');
-    navToggle.setAttribute('aria-expanded', String(isOpen));
-  });
-
-  siteNav.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      siteNav.classList.remove('is-open');
-      navToggle.setAttribute('aria-expanded', 'false');
-    });
-  });
-}
-
 const landing = document.getElementById('blog-landing');
 const recentList = document.getElementById('blog-recent-list');
 const categoryList = document.getElementById('blog-category-list');
@@ -225,7 +203,7 @@ function renderLanding(posts) {
 }
 
 async function loadPosts() {
-  const manifestResponse = await fetch('blog/posts.json');
+  const manifestResponse = await fetch(encodeURI('blog/posts.json'));
   if (!manifestResponse.ok) {
     throw new Error(`Post manifest failed (${manifestResponse.status})`);
   }
@@ -236,7 +214,7 @@ async function loadPosts() {
   const posts = await Promise.all(
     postPaths.map(async (manifestPath) => {
       const path = normalizePostPath(manifestPath);
-      const response = await fetch(`blog/posts/${path}`);
+      const response = await fetch(encodeURI(`blog/posts/${path}`));
       if (!response.ok) {
         throw new Error(`Failed to load post: ${path}`);
       }
