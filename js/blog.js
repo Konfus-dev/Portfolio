@@ -1,7 +1,23 @@
 const yearLabel = document.getElementById('year');
+const navToggle = document.querySelector('[data-nav-toggle]');
+const siteNav = document.getElementById('site-nav');
 
 if (yearLabel) {
   yearLabel.textContent = new Date().getFullYear();
+}
+
+if (navToggle && siteNav) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = siteNav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  siteNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      siteNav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
 }
 
 const landing = document.getElementById('blog-landing');
@@ -12,6 +28,8 @@ const postTitle = document.getElementById('blog-post-title');
 const postDate = document.getElementById('blog-post-date');
 const postCategory = document.getElementById('blog-post-category');
 const postBody = document.getElementById('blog-post-body');
+const allPostsList = document.getElementById('blog-all-posts-list');
+const blogFilter = document.getElementById('blog-filter');
 
 function titleCase(value) {
   return value
@@ -49,8 +67,9 @@ function excerptFromMarkdown(markdown) {
   const clean = markdown
     .replace(/^#+\s+/gm, '')
     .replace(/!\[[^\]]*\]\([^\)]*\)/g, '')
-    .replace(/\[[^\]]*\]\([^\)]*\)/g, '$1')
+    .replace(/\[([^\]]*)\]\([^\)]*\)/g, '$1')
     .replace(/[>*_`-]/g, '')
+    .replace(/\s+/g, ' ')
     .trim();
   return clean.slice(0, 180) + (clean.length > 180 ? '…' : '');
 }
@@ -98,11 +117,19 @@ function buildPostCard(post) {
   return card;
 }
 
+function buildAllPosts(posts) {
+  const fragment = document.createDocumentFragment();
+  posts.forEach((post) => {
+    const item = document.createElement('li');
+    item.innerHTML = `<a href="blog.html?post=${encodeURIComponent(post.path)}">${post.title}</a><span>${formatDate(post.date)}</span>`;
+    fragment.appendChild(item);
+  });
+  allPostsList.appendChild(fragment);
+}
+
 function buildCategoryNavigation(posts) {
   const byCategory = posts.reduce((acc, post) => {
-    if (!acc[post.category]) {
-      acc[post.category] = [];
-    }
+    if (!acc[post.category]) acc[post.category] = [];
     acc[post.category].push(post);
     return acc;
   }, {});
@@ -135,22 +162,40 @@ function buildCategoryNavigation(posts) {
   categoryList.appendChild(fragment);
 }
 
+function isNonMarkdownHref(href) {
+  return (
+    href.startsWith('http://') ||
+    href.startsWith('https://') ||
+    href.startsWith('mailto:') ||
+    href.startsWith('tel:') ||
+    href.startsWith('#')
+  );
+}
+
 function rewritePostLinks(container, postPath) {
   const links = container.querySelectorAll('a[href]');
   links.forEach((link) => {
     const href = link.getAttribute('href');
-    if (!href) return;
+    if (!href || isNonMarkdownHref(href)) return;
+
     if (href.endsWith('.md')) {
       const resolved = resolveMarkdownRelativePath(postPath, href);
       link.href = `blog.html?post=${encodeURIComponent(resolved)}`;
+      return;
     }
+
+    const resolved = resolveMarkdownRelativePath(postPath, href);
+    link.href = `blog/posts/${resolved}`;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
   });
 
   const images = container.querySelectorAll('img[src]');
   images.forEach((image) => {
     const src = image.getAttribute('src');
-    if (!src || src.startsWith('http://') || src.startsWith('https://') || src.startsWith('/')) return;
+    if (!src || isNonMarkdownHref(src) || src.startsWith('/')) return;
     image.src = `blog/posts/${resolveMarkdownRelativePath(postPath, src)}`;
+    image.loading = 'lazy';
   });
 }
 
@@ -164,8 +209,27 @@ function renderPost(post) {
   rewritePostLinks(postBody, post.path);
 }
 
+function filterPosts(posts, value) {
+  const normalized = value.trim().toLowerCase();
+  if (!normalized) return posts;
+  return posts.filter((post) =>
+    [post.title, post.summary, post.category].join(' ').toLowerCase().includes(normalized)
+  );
+}
+
+function renderLanding(posts) {
+  recentList.innerHTML = '';
+  const fragment = document.createDocumentFragment();
+  posts.slice(0, 8).forEach((post) => fragment.appendChild(buildPostCard(post)));
+  recentList.appendChild(fragment);
+}
+
 async function loadPosts() {
   const manifestResponse = await fetch('blog/posts.json');
+  if (!manifestResponse.ok) {
+    throw new Error(`Post manifest failed (${manifestResponse.status})`);
+  }
+
   const manifest = await manifestResponse.json();
   const postPaths = manifest.posts || [];
 
@@ -173,9 +237,12 @@ async function loadPosts() {
     postPaths.map(async (manifestPath) => {
       const path = normalizePostPath(manifestPath);
       const response = await fetch(`blog/posts/${path}`);
+      if (!response.ok) {
+        throw new Error(`Failed to load post: ${path}`);
+      }
+
       const markdown = await response.text();
       const { metadata, body } = parseFrontMatter(markdown);
-
       const headingMatch = body.match(/^#\s+(.+)$/m);
       const title = metadata.title || headingMatch?.[1] || path.split('/').pop().replace('.md', '');
 
@@ -197,16 +264,19 @@ async function initBlog() {
   try {
     const posts = await loadPosts();
 
-    if (posts.length === 0) {
+    if (!posts.length) {
       recentList.innerHTML = '<p>No posts found yet.</p>';
       return;
     }
 
-    const recentFragment = document.createDocumentFragment();
-    posts.slice(0, 6).forEach((post) => recentFragment.appendChild(buildPostCard(post)));
-    recentList.appendChild(recentFragment);
-
+    renderLanding(posts);
+    buildAllPosts(posts);
     buildCategoryNavigation(posts);
+
+    blogFilter?.addEventListener('input', () => {
+      const filtered = filterPosts(posts, blogFilter.value);
+      renderLanding(filtered);
+    });
 
     const query = new URLSearchParams(window.location.search);
     const requestedPostPath = normalizePostPath(query.get('post') || '');
@@ -215,8 +285,11 @@ async function initBlog() {
       const post = posts.find((item) => item.path === requestedPostPath);
       if (post) {
         renderPost(post);
+        return;
       }
     }
+
+    renderPost(posts[0]);
   } catch (error) {
     recentList.innerHTML = `<p>Unable to load blog posts: ${error.message}</p>`;
   }
