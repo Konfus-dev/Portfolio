@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jeremy Hummel | Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono&display=swap"
+      rel="stylesheet"/>
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.ico" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header" data-site-header>
+      <div class="container header__inner">
+        <a class="logo" href="index.html#home">Jeremy Hummel</a>
+        <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-toggle__line" aria-hidden="true"></span>
+          <span class="nav-toggle__line" aria-hidden="true"></span>
+          <span class="nav-toggle__line" aria-hidden="true"></span>
+          <span class="visually-hidden">Toggle navigation</span>
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Blog navigation">
+          <a href="index.html#home">Home</a>
+          <a href="index.html#projects">Projects</a>
+          <a href="blog.html">Blog</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="blog-page">
+      <section class="blog-hero">
+        <div class="container">
+          <p class="eyebrow">Blog</p>
+          <h1>Dev notes, experiments, and project logs.</h1>
+          <p>Posts are authored in Markdown and organized by category folders.</p>
+        </div>
+      </section>
+
+      <section class="blog-shell">
+        <div class="container blog-layout">
+          <aside class="blog-sidebar" aria-label="Post navigation">
+            <h2>Categories</h2>
+            <label class="blog-filter" for="blog-filter">
+              <span class="visually-hidden">Search posts</span>
+              <input id="blog-filter" type="search" placeholder="Filter posts" />
+            </label>
+            <div id="blog-category-list"></div>
+            <section class="blog-all-posts">
+              <h3>All posts</h3>
+              <ul id="blog-all-posts-list"></ul>
+            </section>
+          </aside>
+
+          <section class="blog-content" aria-live="polite">
+            <div id="blog-landing">
+              <h2>Recent posts</h2>
+              <div id="blog-recent-list" class="blog-post-list"></div>
+            </div>
+
+            <article id="blog-post-view" class="blog-post-view" hidden>
+              <div class="blog-post-meta">
+                <p class="eyebrow" id="blog-post-category"></p>
+                <h2 id="blog-post-title"></h2>
+                <p id="blog-post-date"></p>
+              </div>
+              <div id="blog-post-body" class="markdown-body"></div>
+            </article>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Jeremy Hummel. Tools engineer, UX advocate, gamer, and outdoors enthusiast.</p>
+      </div>
+    </footer>
+
+    <script src="js/vendor/marked.min.js"></script>
+    <script src="js/blog.js"></script>
+  </body>
+</html>
